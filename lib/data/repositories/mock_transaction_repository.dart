@@ -2,7 +2,89 @@ import '../../domain/entities/transaction.dart';
 import '../../domain/repositories/transaction_repository.dart';
 
 class MockTransactionRepository implements TransactionRepository {
-  final List<AppTransaction> _txs = [];
+  final List<AppTransaction> _txs = [
+    AppTransaction(
+      id: 1,
+      accountId: 1,
+      categoryId: 1,  // Аренда квартиры
+      amount: -100000.0,
+      transactionDate: DateTime.parse('2025-06-13T10:00:00.000Z'),
+      comment: '',
+      createdAt: DateTime.parse('2025-06-13T10:00:00.000Z'),
+      updatedAt: DateTime.parse('2025-06-13T10:00:00.000Z'),
+    ),
+    AppTransaction(
+      id: 2,
+      accountId: 1,
+      categoryId: 2,  // Одежда
+      amount: -100000.0,
+      transactionDate: DateTime.parse('2025-06-13T11:00:00.000Z'),
+      comment: '',
+      createdAt: DateTime.parse('2025-06-13T11:00:00.000Z'),
+      updatedAt: DateTime.parse('2025-06-13T11:00:00.000Z'),
+    ),
+    AppTransaction(
+      id: 3,
+      accountId: 1,
+      categoryId: 3,  // На собачку (Джек)
+      amount: -100000.0,
+      transactionDate: DateTime.parse('2025-06-13T12:00:00.000Z'),
+      comment: 'Джек',
+      createdAt: DateTime.parse('2025-06-13T12:00:00.000Z'),
+      updatedAt: DateTime.parse('2025-06-13T12:00:00.000Z'),
+    ),
+    AppTransaction(
+      id: 4,
+      accountId: 1,
+      categoryId: 3,  // На собачку (Энни)
+      amount: -100000.0,
+      transactionDate: DateTime.parse('2025-06-13T12:30:00.000Z'),
+      comment: 'Энни',
+      createdAt: DateTime.parse('2025-06-13T12:30:00.000Z'),
+      updatedAt: DateTime.parse('2025-06-13T12:30:00.000Z'),
+    ),
+    AppTransaction(
+      id: 5,
+      accountId: 1,
+      categoryId: 4,  // Ремонт квартиры
+      amount: -100000.0,
+      transactionDate: DateTime.parse('2025-06-13T13:00:00.000Z'),
+      comment: '',
+      createdAt: DateTime.parse('2025-06-13T13:00:00.000Z'),
+      updatedAt: DateTime.parse('2025-06-13T13:00:00.000Z'),
+    ),
+    AppTransaction(
+      id: 6,
+      accountId: 1,
+      categoryId: 5,  // Продукты
+      amount: -100000.0,
+      transactionDate: DateTime.parse('2025-06-13T13:30:00.000Z'),
+      comment: '',
+      createdAt: DateTime.parse('2025-06-13T13:30:00.000Z'),
+      updatedAt: DateTime.parse('2025-06-13T13:30:00.000Z'),
+    ),
+    AppTransaction(
+      id: 7,
+      accountId: 1,
+      categoryId: 6,  // Спортзал
+      amount: -100000.0,
+      transactionDate: DateTime.parse('2025-06-13T14:00:00.000Z'),
+      comment: '',
+      createdAt: DateTime.parse('2025-06-13T14:00:00.000Z'),
+      updatedAt: DateTime.parse('2025-06-13T14:00:00.000Z'),
+    ),
+    AppTransaction(
+      id: 8,
+      accountId: 1,
+      categoryId: 7,  // Медицина
+      amount: -100000.0,
+      transactionDate: DateTime.parse('2025-06-13T14:30:00.000Z'),
+      comment: '',
+      createdAt: DateTime.parse('2025-06-13T14:30:00.000Z'),
+      updatedAt: DateTime.parse('2025-06-13T14:30:00.000Z'),
+    ),
+  ];
+
 
   @override
   Future<List<AppTransaction>> getAllTransactions() async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:yandex_homework_1/ui/screens/expense_page.dart';
 
 import '../../core/models.dart';
 
@@ -7,7 +8,7 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
   // final int _selectedIndex = 0;
   final _pages = const [
-    Center(child: Text('Расходы')),
+    ExpensesPage(),
     Center(child: Text('Доходы')),
     Center(child: Text('Счет')),
     Center(child: Text('Статьи')),
