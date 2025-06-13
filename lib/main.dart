@@ -1,14 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/models.dart';
+import 'data/repositories/mock_bank_account_repository.dart';
+import 'domain/repositories/bank_account_repository.dart';
 import 'ui/screens/home_screen.dart';
+import 'domain/repositories/category_repository.dart';
+import 'data/repositories/mock_category_repository.dart';
+
 
 void main() {
-  runApp(ChangeNotifierProvider(
-      create: (_) => NavModel(),
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<NavModel>(
+          create: (_) => NavModel(),
+        ),
+        Provider<CategoryRepository>(
+          create: (_) => MockCategoryRepository(),
+        ),
+        Provider<BankAccountRepository>(create: (_) => MockBankAccountRepository()),
+      ],
       child: MyApp(),
-    ),);
+    ),
+  );
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
