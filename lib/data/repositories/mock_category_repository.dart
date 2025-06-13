@@ -10,8 +10,8 @@ class MockCategoryRepository implements CategoryRepository {
     const Category(id: 5, name: 'Продукты', emoji: '🍭', isIncome: false),
     const Category(id: 6, name: 'Спортзал', emoji: '🏋️', isIncome: false),
     const Category(id: 7, name: 'Медицины', emoji: '💊', isIncome: false),
-    const Category(id: 8, name: 'Зарплата', emoji: '💰', isIncome: true),
-    const Category(id: 9, name: 'Подработка', emoji: '💰', isIncome: true),
+    const Category(id: 8, name: 'Зарплата', emoji: '', isIncome: true),
+    const Category(id: 9, name: 'Подработка', emoji: '', isIncome: true),
   ];
 
   @override

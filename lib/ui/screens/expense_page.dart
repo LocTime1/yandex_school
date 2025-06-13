@@ -62,11 +62,19 @@ class ExpensesPage extends StatelessWidget {
               return ListTile(
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                leading: CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Colors.transparent,
-                  child: Text(cat.emoji, style: const TextStyle(fontSize: 20)),
-                ),
+                leading:
+                  cat.emoji.isNotEmpty
+                      ? CircleAvatar(
+                        radius: 20,
+                        backgroundColor: Colors.transparent,
+                        child: Text(
+                          cat.emoji,
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                      )
+                      : null,
+              minLeadingWidth: 0,
+              horizontalTitleGap: 0,
                 title: Text(cat.name),
                 subtitle: tx.comment.isNotEmpty ? Text(tx.comment) : null,
                 trailing: Row(

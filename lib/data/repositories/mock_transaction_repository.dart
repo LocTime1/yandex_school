@@ -6,7 +6,7 @@ class MockTransactionRepository implements TransactionRepository {
     AppTransaction(
       id: 1,
       accountId: 1,
-      categoryId: 1,  // Аренда квартиры
+      categoryId: 1,  
       amount: -100000.0,
       transactionDate: DateTime.parse('2025-06-13T10:00:00.000Z'),
       comment: '',
@@ -16,7 +16,7 @@ class MockTransactionRepository implements TransactionRepository {
     AppTransaction(
       id: 2,
       accountId: 1,
-      categoryId: 2,  // Одежда
+      categoryId: 2,  
       amount: -100000.0,
       transactionDate: DateTime.parse('2025-06-13T11:00:00.000Z'),
       comment: '',
@@ -26,7 +26,7 @@ class MockTransactionRepository implements TransactionRepository {
     AppTransaction(
       id: 3,
       accountId: 1,
-      categoryId: 3,  // На собачку (Джек)
+      categoryId: 3,  
       amount: -100000.0,
       transactionDate: DateTime.parse('2025-06-13T12:00:00.000Z'),
       comment: 'Джек',
@@ -36,7 +36,7 @@ class MockTransactionRepository implements TransactionRepository {
     AppTransaction(
       id: 4,
       accountId: 1,
-      categoryId: 3,  // На собачку (Энни)
+      categoryId: 3,  
       amount: -100000.0,
       transactionDate: DateTime.parse('2025-06-13T12:30:00.000Z'),
       comment: 'Энни',
@@ -46,7 +46,7 @@ class MockTransactionRepository implements TransactionRepository {
     AppTransaction(
       id: 5,
       accountId: 1,
-      categoryId: 4,  // Ремонт квартиры
+      categoryId: 4,  
       amount: -100000.0,
       transactionDate: DateTime.parse('2025-06-13T13:00:00.000Z'),
       comment: '',
@@ -56,7 +56,7 @@ class MockTransactionRepository implements TransactionRepository {
     AppTransaction(
       id: 6,
       accountId: 1,
-      categoryId: 5,  // Продукты
+      categoryId: 5,  
       amount: -100000.0,
       transactionDate: DateTime.parse('2025-06-13T13:30:00.000Z'),
       comment: '',
@@ -66,7 +66,7 @@ class MockTransactionRepository implements TransactionRepository {
     AppTransaction(
       id: 7,
       accountId: 1,
-      categoryId: 6,  // Спортзал
+      categoryId: 6,  
       amount: -100000.0,
       transactionDate: DateTime.parse('2025-06-13T14:00:00.000Z'),
       comment: '',
@@ -76,8 +76,28 @@ class MockTransactionRepository implements TransactionRepository {
     AppTransaction(
       id: 8,
       accountId: 1,
-      categoryId: 7,  // Медицина
+      categoryId: 7,  
       amount: -100000.0,
+      transactionDate: DateTime.parse('2025-06-13T14:30:00.000Z'),
+      comment: '',
+      createdAt: DateTime.parse('2025-06-13T14:30:00.000Z'),
+      updatedAt: DateTime.parse('2025-06-13T14:30:00.000Z'),
+    ),
+    AppTransaction(
+      id: 9,
+      accountId: 1,
+      categoryId: 8,  
+      amount: 500000.0,
+      transactionDate: DateTime.parse('2025-06-13T14:30:00.000Z'),
+      comment: '',
+      createdAt: DateTime.parse('2025-06-13T14:30:00.000Z'),
+      updatedAt: DateTime.parse('2025-06-13T14:30:00.000Z'),
+    ),
+    AppTransaction(
+      id: 10,
+      accountId: 1,
+      categoryId: 9,  
+      amount: 100000.0,
       transactionDate: DateTime.parse('2025-06-13T14:30:00.000Z'),
       comment: '',
       createdAt: DateTime.parse('2025-06-13T14:30:00.000Z'),
