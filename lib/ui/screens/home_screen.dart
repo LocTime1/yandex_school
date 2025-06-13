@@ -52,6 +52,27 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  RawMaterialButton? _buildFab(int idx) {
+    if (idx < 3) {
+      return RawMaterialButton(
+        onPressed: () {
+        },
+        fillColor: Color.fromRGBO(42, 232, 129, 1),
+        constraints: BoxConstraints.tightFor(
+          width: 80.0, 
+          height: 80.0,
+        ),
+        shape: CircleBorder(), 
+        child: Icon(
+          Icons.add,
+          size: 40.0, 
+          color: Colors.white,
+        ),
+      );
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final model = context.watch<NavModel>();
@@ -110,6 +131,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
+      floatingActionButton: _buildFab(idx),
     );
   }
 }
