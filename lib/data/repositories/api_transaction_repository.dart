@@ -40,12 +40,28 @@ class ApiTransactionRepository implements TransactionRepository {
     required DateTime from,
     required DateTime to,
   }) async {
-    final data = await _api.get('/transactions/account/$accountId/period', {
-      'from': from.toUtc().toIso8601String(),
-      'to': to.toUtc().toIso8601String(),
-    });
-    return (data as List<dynamic>)
-        .map((e) => AppTransaction.fromJson(e as Map<String, dynamic>))
-        .toList();
+    final raw =
+        await _api.get('/transactions/account/$accountId/period', {
+              'from': from.toUtc().toIso8601String(),
+              'to': to.toUtc().toIso8601String(),
+            })
+            as List<dynamic>;
+
+    final flat =
+        raw.map((item) {
+          final m = item as Map<String, dynamic>;
+          return <String, dynamic>{
+            'id': m['id'] as int,
+            'accountId': (m['account'] as Map<String, dynamic>)['id'] as int,
+            'categoryId': (m['category'] as Map<String, dynamic>)['id'] as int,
+            'amount': double.parse(m['amount'] as String),
+            'transactionDate': m['transactionDate'] as String,
+            'comment': (m['comment'] as String?) ?? '',
+            'createdAt': m['createdAt'] as String,
+            'updatedAt': m['updatedAt'] as String,
+          };
+        }).toList();
+
+    return flat.map((e) => AppTransaction.fromJson(e)).toList();
   }
 }
