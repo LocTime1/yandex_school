@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$BankAccount {
 
- int get id; int get userId; String get name; double get balance; String get currency; DateTime get createdAt; DateTime get updatedAt;
+ int get id; int get userId; String get name;@JsonKey(name: 'balance', fromJson: _balanceFromJson, toJson: _balanceToJson) double get balance; String get currency; DateTime get createdAt; DateTime get updatedAt;
 /// Create a copy of BankAccount
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $BankAccountCopyWith<$Res>  {
   factory $BankAccountCopyWith(BankAccount value, $Res Function(BankAccount) _then) = _$BankAccountCopyWithImpl;
 @useResult
 $Res call({
- int id, int userId, String name, double balance, String currency, DateTime createdAt, DateTime updatedAt
+ int id, int userId, String name,@JsonKey(name: 'balance', fromJson: _balanceFromJson, toJson: _balanceToJson) double balance, String currency, DateTime createdAt, DateTime updatedAt
 });
 
 
@@ -86,13 +86,13 @@ as DateTime,
 @JsonSerializable()
 
 class _BankAccount implements BankAccount {
-  const _BankAccount({required this.id, required this.userId, required this.name, required this.balance, required this.currency, required this.createdAt, required this.updatedAt});
+  const _BankAccount({required this.id, required this.userId, required this.name, @JsonKey(name: 'balance', fromJson: _balanceFromJson, toJson: _balanceToJson) required this.balance, required this.currency, required this.createdAt, required this.updatedAt});
   factory _BankAccount.fromJson(Map<String, dynamic> json) => _$BankAccountFromJson(json);
 
 @override final  int id;
 @override final  int userId;
 @override final  String name;
-@override final  double balance;
+@override@JsonKey(name: 'balance', fromJson: _balanceFromJson, toJson: _balanceToJson) final  double balance;
 @override final  String currency;
 @override final  DateTime createdAt;
 @override final  DateTime updatedAt;
@@ -130,7 +130,7 @@ abstract mixin class _$BankAccountCopyWith<$Res> implements $BankAccountCopyWith
   factory _$BankAccountCopyWith(_BankAccount value, $Res Function(_BankAccount) _then) = __$BankAccountCopyWithImpl;
 @override @useResult
 $Res call({
- int id, int userId, String name, double balance, String currency, DateTime createdAt, DateTime updatedAt
+ int id, int userId, String name,@JsonKey(name: 'balance', fromJson: _balanceFromJson, toJson: _balanceToJson) double balance, String currency, DateTime createdAt, DateTime updatedAt
 });
 
 
