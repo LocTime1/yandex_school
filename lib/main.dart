@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'core/models.dart';
 import 'data/repositories/mock_bank_account_repository.dart';
 import 'data/repositories/mock_transaction_repository.dart';
 import 'domain/repositories/bank_account_repository.dart';
@@ -14,8 +13,8 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<NavModel>(
-          create: (_) => NavModel(),
+        ChangeNotifierProvider<ValueNotifier<int>>(
+          create: (_) => ValueNotifier<int>(0),
         ),
         Provider<CategoryRepository>(
           create: (_) => MockCategoryRepository(),

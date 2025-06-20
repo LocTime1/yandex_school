@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../domain/entities/transaction.dart';
 import '../../domain/entities/category.dart';
-import '../../domain/repositories/transaction_repository.dart';
+// import '../../domain/repositories/transaction_repository.dart';
 import '../../domain/repositories/category_repository.dart';
 
 class ExpensesPage extends StatelessWidget {
@@ -11,11 +11,11 @@ class ExpensesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final txRepo  = context.read<TransactionRepository>();
+    // final txRepo  = context.read<TransactionRepository>();
     final catRepo = context.read<CategoryRepository>();
     return FutureBuilder<List<dynamic>>(
       future: Future.wait([
-        txRepo.getAllTransactions(),
+        // txRepo.getAllTransactions(),
         catRepo.getAllCategories(),
       ]),
       builder: (ctx, snap) {
