@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class ApiClient {
   final http.Client _http;
   final String baseUrl;
-  final String apiKey;  
+  final String apiKey;
 
   ApiClient({
     required http.Client httpClient,
@@ -12,13 +12,13 @@ class ApiClient {
     required this.apiKey,
   }) : _http = httpClient;
 
-  Future<dynamic> get(String path, [Map<String,String>? query]) async {
+  Future<dynamic> get(String path, [Map<String, String>? query]) async {
     final uri = Uri.parse('$baseUrl$path').replace(queryParameters: query);
     print(uri);
     final resp = await _http.get(
       uri,
       headers: {
-        'Authorization': 'Bearer $apiKey',      
+        'Authorization': 'Bearer $apiKey',
         'Accept': 'application/json',
       },
     );
@@ -28,14 +28,14 @@ class ApiClient {
     return jsonDecode(resp.body);
   }
 
-   Future<dynamic> post(String path, Map<String, dynamic> body) async {
+  Future<dynamic> post(String path, Map<String, dynamic> body) async {
     final uri = Uri.parse('$baseUrl$path');
     final resp = await _http.post(
       uri,
       headers: {
-        'Authorization':   'Bearer $apiKey',
-        'Content-Type':    'application/json',
-        'Accept':          'application/json',
+        'Authorization': 'Bearer $apiKey',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
       body: jsonEncode(body),
     );
@@ -50,9 +50,9 @@ class ApiClient {
     final resp = await _http.put(
       uri,
       headers: {
-        'Authorization':   'Bearer $apiKey',
-        'Content-Type':    'application/json',
-        'Accept':          'application/json',
+        'Authorization': 'Bearer $apiKey',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
       body: jsonEncode(body),
     );
@@ -68,7 +68,7 @@ class ApiClient {
       uri,
       headers: {
         'Authorization': 'Bearer $apiKey',
-        'Accept':        'application/json',
+        'Accept': 'application/json',
       },
     );
     if (resp.statusCode < 200 || resp.statusCode >= 300) {

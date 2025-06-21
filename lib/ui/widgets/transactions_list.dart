@@ -3,6 +3,7 @@ import '../../domain/entities/transaction.dart';
 import '../../domain/entities/category.dart';
 
 class TransactionsList extends StatelessWidget {
+  final bool showHeader;
   final double total;
   final List<AppTransaction> items;
   final List<Category> categories;
@@ -10,6 +11,7 @@ class TransactionsList extends StatelessWidget {
 
   const TransactionsList({
     Key? key,
+    this.showHeader = true,
     required this.total,
     required this.items,
     required this.categories,
@@ -20,27 +22,28 @@ class TransactionsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          width: double.infinity,
-          color: const Color.fromRGBO(212, 250, 230, 1),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
-            children: [
-              const Text(
-                'Всего',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-              ),
-              const Spacer(),
-              Text(
-                '${total.toStringAsFixed(0)} ₽',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+        if (showHeader)
+          Container(
+            width: double.infinity,
+            color: const Color.fromRGBO(212, 250, 230, 1),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
+              children: [
+                const Text(
+                  'Всего',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
-              ),
-            ],
+                const Spacer(),
+                Text(
+                  '${total.toStringAsFixed(0)} ₽',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
 
         Expanded(
           child: ListView.separated(

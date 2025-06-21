@@ -3,18 +3,12 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'data/datasources/api_client.dart';
 import 'data/repositories/api_bank_account_repository.dart';
-// import 'data/repositories/mock_bank_account_repository.dart';
-// import 'data/repositories/mock_transaction_repository.dart';
-// import 'domain/repositories/bank_account_repository.dart';
-// import 'domain/repositories/transaction_repository.dart';
 import 'data/repositories/api_category_repository.dart';
 import 'data/repositories/api_transaction_repository.dart';
 import 'domain/repositories/bank_account_repository.dart';
 import 'domain/repositories/category_repository.dart';
 import 'domain/repositories/transaction_repository.dart';
 import 'ui/screens/home_screen.dart';
-// import 'domain/repositories/category_repository.dart';
-// import 'data/repositories/mock_category_repository.dart';
 
 void main() async {
   const apiKey = 'EJoa94ip1xgDPzUavksNaKce';
