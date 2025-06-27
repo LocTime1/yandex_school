@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AccountHistory {
 
- int get id; int get accountId; double get balance; String get currency; DateTime get createdAt; String get event;
+@HiveField(0) int get id;@HiveField(1) int get accountId;@HiveField(2) double get balance;@HiveField(3) String get currency;@HiveField(4) DateTime get createdAt;@HiveField(5) String get event;
 /// Create a copy of AccountHistory
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $AccountHistoryCopyWith<$Res>  {
   factory $AccountHistoryCopyWith(AccountHistory value, $Res Function(AccountHistory) _then) = _$AccountHistoryCopyWithImpl;
 @useResult
 $Res call({
- int id, int accountId, double balance, String currency, DateTime createdAt, String event
+@HiveField(0) int id,@HiveField(1) int accountId,@HiveField(2) double balance,@HiveField(3) String currency,@HiveField(4) DateTime createdAt,@HiveField(5) String event
 });
 
 
@@ -85,15 +85,15 @@ as String,
 @JsonSerializable()
 
 class _AccountHistory implements AccountHistory {
-  const _AccountHistory({required this.id, required this.accountId, required this.balance, required this.currency, required this.createdAt, required this.event});
+  const _AccountHistory({@HiveField(0) required this.id, @HiveField(1) required this.accountId, @HiveField(2) required this.balance, @HiveField(3) required this.currency, @HiveField(4) required this.createdAt, @HiveField(5) required this.event});
   factory _AccountHistory.fromJson(Map<String, dynamic> json) => _$AccountHistoryFromJson(json);
 
-@override final  int id;
-@override final  int accountId;
-@override final  double balance;
-@override final  String currency;
-@override final  DateTime createdAt;
-@override final  String event;
+@override@HiveField(0) final  int id;
+@override@HiveField(1) final  int accountId;
+@override@HiveField(2) final  double balance;
+@override@HiveField(3) final  String currency;
+@override@HiveField(4) final  DateTime createdAt;
+@override@HiveField(5) final  String event;
 
 /// Create a copy of AccountHistory
 /// with the given fields replaced by the non-null parameter values.
@@ -128,7 +128,7 @@ abstract mixin class _$AccountHistoryCopyWith<$Res> implements $AccountHistoryCo
   factory _$AccountHistoryCopyWith(_AccountHistory value, $Res Function(_AccountHistory) _then) = __$AccountHistoryCopyWithImpl;
 @override @useResult
 $Res call({
- int id, int accountId, double balance, String currency, DateTime createdAt, String event
+@HiveField(0) int id,@HiveField(1) int accountId,@HiveField(2) double balance,@HiveField(3) String currency,@HiveField(4) DateTime createdAt,@HiveField(5) String event
 });
 
 
