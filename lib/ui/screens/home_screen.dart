@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:yandex_homework_1/ui/screens/transactions_page.dart';
 
 import '../widgets/home_app_bar.dart';
 import '../widgets/home_fab.dart';
@@ -7,8 +8,8 @@ import '../widgets/home_fab.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
   final _pages = const [
-    Center(child: Text('Доходы сегодня')),
-    Center(child: Text('Расходы сегодня')),
+    TransactionsPage(type: TransactionType.expense, accountId: 1),
+    TransactionsPage(type: TransactionType.income, accountId: 1),
     Center(child: Text('Счет')),
     Center(child: Text('Статьи')),
     Center(child: Text('Настройки')),

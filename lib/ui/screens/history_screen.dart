@@ -1,0 +1,107 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
+import '../models/history_model.dart';
+import '../widgets/transactions_list.dart';
+
+class HistoryScreen extends StatelessWidget {
+  final TransactionType type;
+  final int accountId;
+  const HistoryScreen({super.key, required this.type, required this.accountId});
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<HistoryModel>(
+      create:
+          (ctx) => HistoryModel(
+            txRepo: ctx.read(),
+            catRepo: ctx.read(),
+            type: type,
+            accountId: accountId,
+          ),
+      child: const _HistoryView(),
+    );
+  }
+}
+
+class _HistoryView extends StatelessWidget {
+  const _HistoryView();
+
+  @override
+  Widget build(BuildContext context) {
+    final model = context.watch<HistoryModel>();
+    final fmt = DateFormat('dd.MM.yyyy');
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Моя история'),
+        centerTitle: true,
+        backgroundColor: const Color(0xFF00FE81),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.calendar_today,
+              color: Colors.grey,
+              size: 28,
+            ),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body:
+          model.isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : model.error != null
+              ? Center(child: Text('Ошибка: ${model.error}'))
+              : Column(
+                children: [
+                  ListTile(
+                    title: const Text('Начало'),
+                    tileColor: const Color.fromRGBO(0, 254, 129, 0.25),
+                    trailing: Text(fmt.format(model.startDate)),
+                    onTap: () => _pickDate(context, model, isStart: true),
+                  ),
+                  ListTile(
+                    title: const Text('Конец'),
+                    tileColor: const Color.fromRGBO(0, 254, 129, 0.25),
+                    trailing: Text(fmt.format(model.endDate)),
+                    onTap: () => _pickDate(context, model, isStart: false),
+                  ),
+                  ListTile(
+                    title: const Text('Сумма'),
+                    tileColor: const Color.fromRGBO(0, 254, 129, 0.25),
+                    trailing: Text('${model.total.toStringAsFixed(0)} ₽'),
+                  ),
+                  Expanded(
+                    child: TransactionsList(
+                      total: model.total,
+                      items: model.items,
+                      categories: model.categories,
+                      showHeader: false, 
+                    ),
+                  ),
+                ],
+              ),
+    );
+  }
+
+  Future<void> _pickDate(
+    BuildContext ctx,
+    HistoryModel model, {
+    required bool isStart,
+  }) async {
+    final initial = isStart ? model.startDate : model.endDate;
+    final picked = await showDatePicker(
+      context: ctx,
+      initialDate: initial,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      await model.updatePeriod(
+        newStart: isStart ? picked : null,
+        newEnd: isStart ? null : picked,
+      );
+    }
+  }
+}
