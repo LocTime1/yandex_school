@@ -4,13 +4,14 @@ import 'package:yandex_homework_1/ui/screens/transactions_page.dart';
 
 import '../widgets/home_app_bar.dart';
 import '../widgets/home_fab.dart';
+import 'account_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
   final _pages = const [
     TransactionsPage(type: TransactionType.expense, accountId: 1),
     TransactionsPage(type: TransactionType.income, accountId: 1),
-    Center(child: Text('Счет')),
+    AccountScreen(),
     Center(child: Text('Статьи')),
     Center(child: Text('Настройки')),
   ];
