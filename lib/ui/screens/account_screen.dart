@@ -8,6 +8,12 @@ import 'package:sensors_plus/sensors_plus.dart';
 import '../../domain/entities/bank_account.dart';
 import '../../domain/repositories/bank_account_repository.dart';
 
+const _currencies = <Map<String, String>>[
+  {'label': 'Российский рубль ₽', 'code': '₽'},
+  {'label': 'Американский доллар \$', 'code': '\$'},
+  {'label': 'Евро €', 'code': '€'},
+];
+
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
 
@@ -16,7 +22,7 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  bool _showBalance = false;
+  bool _showBalance = true;
   late final StreamSubscription<AccelerometerEvent> _accelSub;
   DateTime _lastShake = DateTime.now();
 
@@ -29,9 +35,8 @@ class _AccountScreenState extends State<AccountScreen> {
   void _onAccelerometer(AccelerometerEvent ev) {
     final now = DateTime.now();
     final magnitude = sqrt(ev.x * ev.x + ev.y * ev.y + ev.z * ev.z);
-    const shakeThreshold = 20.0;
-
-    if (magnitude > shakeThreshold &&
+    const threshold = 25.0;
+    if (magnitude > threshold &&
         now.difference(_lastShake) > const Duration(milliseconds: 500)) {
       _lastShake = now;
       setState(() => _showBalance = !_showBalance);
@@ -70,7 +75,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   _BalanceTile(
                     icon: Icons.account_balance_wallet_outlined,
                     label: 'Баланс',
-                    value: acc.balance.toStringAsFixed(0) + ' ₽',
+                    value: '${acc.balance.toStringAsFixed(0)} ₽',
                     showValue: _showBalance,
                     onTap: () {},
                   ),
@@ -79,7 +84,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     icon: Icons.currency_ruble,
                     label: 'Валюта',
                     value: acc.currency,
-                    onTap: () {},
+                    onTap: () => _showCurrencyPicker(context, acc),
                   ),
                 ],
               ),
@@ -87,6 +92,51 @@ class _AccountScreenState extends State<AccountScreen> {
           ],
         );
       },
+    );
+  }
+
+  void _showCurrencyPicker(BuildContext ctx, BankAccount acc) {
+    showModalBottomSheet(
+      context: ctx,
+      builder:
+          (bctx) => SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ..._currencies.map((curr) {
+                  return Column(
+                    children: [
+                      ListTile(
+                        leading: Text(
+                          curr['code']!,
+                          style: const TextStyle(fontSize: 25),
+                        ),
+                        title: Text(curr['label']!),
+                        onTap: () async {
+                          final updated = acc.copyWith(currency: curr['code']!);
+                          await ctx.read<BankAccountRepository>().updateAccount(
+                            updated,
+                          );
+                          Navigator.pop(bctx);
+                          setState(() {});
+                        },
+                      ),
+                      Divider(height: 5),
+                    ],
+                  );
+                }),
+                ListTile(
+                  tileColor: Colors.red,
+                  leading: const Icon(Icons.close, color: Colors.white),
+                  title: const Text(
+                    'Отмена',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onTap: () => Navigator.pop(bctx),
+                ),
+              ],
+            ),
+          ),
     );
   }
 }
@@ -126,7 +176,9 @@ class __BalanceTileState extends State<_BalanceTile>
       begin: 0.6,
       end: 1.0,
     ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
-    if (!widget.showValue) _ctrl.repeat(reverse: true);
+    if (!widget.showValue) {
+      _ctrl.repeat(reverse: true);
+    }
   }
 
   @override
@@ -161,14 +213,13 @@ class __BalanceTileState extends State<_BalanceTile>
               alignment: Alignment.center,
               children: [
                 Text(
-                  widget.showValue ? widget.value : "",
+                  widget.showValue ? widget.value : '',
                   key: const ValueKey('balance_text'),
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-
                 FadeTransition(
                   opacity: _opacityAnim,
                   child:
@@ -189,7 +240,6 @@ class __BalanceTileState extends State<_BalanceTile>
               ],
             ),
           ),
-
           const SizedBox(width: 8),
           const Icon(Icons.chevron_right, size: 24),
         ],
