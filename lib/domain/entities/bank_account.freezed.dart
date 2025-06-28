@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$BankAccount {
 
- int get id; int get userId; String get name;@JsonKey(name: 'balance', fromJson: _balanceFromJson, toJson: _balanceToJson) double get balance; String get currency; DateTime get createdAt; DateTime get updatedAt;
+@HiveField(0) int get id;@HiveField(1) int get userId;@HiveField(2) String get name;@HiveField(3)@JsonKey(name: 'balance', fromJson: _balanceFromJson, toJson: _balanceToJson) double get balance;@HiveField(4) String get currency;@HiveField(5) DateTime get createdAt;@HiveField(6) DateTime get updatedAt;
 /// Create a copy of BankAccount
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $BankAccountCopyWith<$Res>  {
   factory $BankAccountCopyWith(BankAccount value, $Res Function(BankAccount) _then) = _$BankAccountCopyWithImpl;
 @useResult
 $Res call({
- int id, int userId, String name,@JsonKey(name: 'balance', fromJson: _balanceFromJson, toJson: _balanceToJson) double balance, String currency, DateTime createdAt, DateTime updatedAt
+@HiveField(0) int id,@HiveField(1) int userId,@HiveField(2) String name,@HiveField(3)@JsonKey(name: 'balance', fromJson: _balanceFromJson, toJson: _balanceToJson) double balance,@HiveField(4) String currency,@HiveField(5) DateTime createdAt,@HiveField(6) DateTime updatedAt
 });
 
 
@@ -86,16 +86,16 @@ as DateTime,
 @JsonSerializable()
 
 class _BankAccount implements BankAccount {
-  const _BankAccount({required this.id, required this.userId, required this.name, @JsonKey(name: 'balance', fromJson: _balanceFromJson, toJson: _balanceToJson) required this.balance, required this.currency, required this.createdAt, required this.updatedAt});
+  const _BankAccount({@HiveField(0) required this.id, @HiveField(1) required this.userId, @HiveField(2) required this.name, @HiveField(3)@JsonKey(name: 'balance', fromJson: _balanceFromJson, toJson: _balanceToJson) required this.balance, @HiveField(4) required this.currency, @HiveField(5) required this.createdAt, @HiveField(6) required this.updatedAt});
   factory _BankAccount.fromJson(Map<String, dynamic> json) => _$BankAccountFromJson(json);
 
-@override final  int id;
-@override final  int userId;
-@override final  String name;
-@override@JsonKey(name: 'balance', fromJson: _balanceFromJson, toJson: _balanceToJson) final  double balance;
-@override final  String currency;
-@override final  DateTime createdAt;
-@override final  DateTime updatedAt;
+@override@HiveField(0) final  int id;
+@override@HiveField(1) final  int userId;
+@override@HiveField(2) final  String name;
+@override@HiveField(3)@JsonKey(name: 'balance', fromJson: _balanceFromJson, toJson: _balanceToJson) final  double balance;
+@override@HiveField(4) final  String currency;
+@override@HiveField(5) final  DateTime createdAt;
+@override@HiveField(6) final  DateTime updatedAt;
 
 /// Create a copy of BankAccount
 /// with the given fields replaced by the non-null parameter values.
@@ -130,7 +130,7 @@ abstract mixin class _$BankAccountCopyWith<$Res> implements $BankAccountCopyWith
   factory _$BankAccountCopyWith(_BankAccount value, $Res Function(_BankAccount) _then) = __$BankAccountCopyWithImpl;
 @override @useResult
 $Res call({
- int id, int userId, String name,@JsonKey(name: 'balance', fromJson: _balanceFromJson, toJson: _balanceToJson) double balance, String currency, DateTime createdAt, DateTime updatedAt
+@HiveField(0) int id,@HiveField(1) int userId,@HiveField(2) String name,@HiveField(3)@JsonKey(name: 'balance', fromJson: _balanceFromJson, toJson: _balanceToJson) double balance,@HiveField(4) String currency,@HiveField(5) DateTime createdAt,@HiveField(6) DateTime updatedAt
 });
 
 

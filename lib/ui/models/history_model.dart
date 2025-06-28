@@ -1,22 +1,23 @@
 import 'package:flutter/foundation.dart' show ChangeNotifier;
+import '../../core/models/transaction_type.dart';
 import '../../domain/entities/transaction.dart';
 import '../../domain/repositories/transaction_repository.dart';
 import '../../domain/entities/category.dart';
 import '../../domain/repositories/category_repository.dart';
-
-enum TransactionType { expense, income }
 
 class HistoryModel extends ChangeNotifier {
   final TransactionRepository txRepo;
   final CategoryRepository catRepo;
   final TransactionType type;
   final int accountId;
+  final int? categoryFilter;
 
   HistoryModel({
     required this.txRepo,
     required this.catRepo,
     required this.type,
     required this.accountId,
+    this.categoryFilter,
   }) {
     final now = DateTime.now();
     endDate = DateTime(now.year, now.month, now.day);
@@ -35,10 +36,16 @@ class HistoryModel extends ChangeNotifier {
   List<Category> get categories => _cats;
 
   List<AppTransaction> get items {
-    return _all.where((t) {
+    var list = _all.where((t) {
       final cat = _cats.firstWhere((c) => c.id == t.categoryId);
-      return type == TransactionType.expense ? !cat.isIncome : cat.isIncome;
-    }).toList();
+      final okType =
+          type == TransactionType.expense ? !cat.isIncome : cat.isIncome;
+      return okType;
+    });
+    if (categoryFilter != null) {
+      list = list.where((t) => t.categoryId == categoryFilter);
+    }
+    return list.toList();
   }
 
   double get total => items.fold(0, (sum, t) => sum + t.amount);

@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Category {
 
- int get id; String get name; String get emoji;@JsonKey(name: 'isIncome') bool get isIncome;
+@HiveField(0) int get id;@HiveField(1) String get name;@HiveField(2) String get emoji;@HiveField(3)@JsonKey(name: 'isIncome') bool get isIncome;
 /// Create a copy of Category
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $CategoryCopyWith<$Res>  {
   factory $CategoryCopyWith(Category value, $Res Function(Category) _then) = _$CategoryCopyWithImpl;
 @useResult
 $Res call({
- int id, String name, String emoji,@JsonKey(name: 'isIncome') bool isIncome
+@HiveField(0) int id,@HiveField(1) String name,@HiveField(2) String emoji,@HiveField(3)@JsonKey(name: 'isIncome') bool isIncome
 });
 
 
@@ -83,13 +83,13 @@ as bool,
 @JsonSerializable()
 
 class _Category implements Category {
-  const _Category({required this.id, required this.name, required this.emoji, @JsonKey(name: 'isIncome') required this.isIncome});
+  const _Category({@HiveField(0) required this.id, @HiveField(1) required this.name, @HiveField(2) required this.emoji, @HiveField(3)@JsonKey(name: 'isIncome') required this.isIncome});
   factory _Category.fromJson(Map<String, dynamic> json) => _$CategoryFromJson(json);
 
-@override final  int id;
-@override final  String name;
-@override final  String emoji;
-@override@JsonKey(name: 'isIncome') final  bool isIncome;
+@override@HiveField(0) final  int id;
+@override@HiveField(1) final  String name;
+@override@HiveField(2) final  String emoji;
+@override@HiveField(3)@JsonKey(name: 'isIncome') final  bool isIncome;
 
 /// Create a copy of Category
 /// with the given fields replaced by the non-null parameter values.
@@ -124,7 +124,7 @@ abstract mixin class _$CategoryCopyWith<$Res> implements $CategoryCopyWith<$Res>
   factory _$CategoryCopyWith(_Category value, $Res Function(_Category) _then) = __$CategoryCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String name, String emoji,@JsonKey(name: 'isIncome') bool isIncome
+@HiveField(0) int id,@HiveField(1) String name,@HiveField(2) String emoji,@HiveField(3)@JsonKey(name: 'isIncome') bool isIncome
 });
 
 

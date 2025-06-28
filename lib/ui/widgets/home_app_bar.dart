@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import '../models/history_model.dart';
+import 'package:provider/provider.dart';
+import '../../core/models/transaction_type.dart';
+import '../../domain/repositories/bank_account_repository.dart';
+import '../screens/edit_account_screen.dart';
 import '../screens/history_screen.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -48,7 +51,23 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ];
       case 2:
-        return [_AppBarIcon(icon: Icons.edit, onPressed: () {})];
+        return [
+          _AppBarIcon(
+            icon: Icons.edit,
+            onPressed: () {
+              final repo = context.read<BankAccountRepository>();
+              repo.getAllAccounts().then((list) {
+                final id = list.first.id;
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => EditAccountScreen(accountId: id),
+                  ),
+                );
+              });
+            },
+          ),
+        ];
+
       default:
         return [];
     }

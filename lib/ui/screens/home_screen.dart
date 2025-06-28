@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:yandex_homework_1/ui/screens/articles_screen.dart';
 import 'package:yandex_homework_1/ui/screens/transactions_page.dart';
 
 import '../widgets/home_app_bar.dart';
 import '../widgets/home_fab.dart';
+import 'account_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
   final _pages = const [
     TransactionsPage(type: TransactionType.expense, accountId: 1),
     TransactionsPage(type: TransactionType.income, accountId: 1),
-    Center(child: Text('Счет')),
-    Center(child: Text('Статьи')),
+    AccountScreen(),
+    ArticlesScreen(),
     Center(child: Text('Настройки')),
   ];
   final _titles = [
