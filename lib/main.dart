@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart' show rootBundle;
 
 import 'data/datasources/api_client.dart';
 import 'data/repositories/api_category_repository.dart';
@@ -35,7 +36,16 @@ Future<void> main() async {
   Hive.registerAdapter(CategoryAdapter());
   Hive.registerAdapter(AppTransactionAdapter());
   Hive.registerAdapter(BankAccountAdapter());
-  const apiKey = 'EJoa94ip1xgDPzUavksNaKce';
+
+  final raw = await rootBundle.loadString('assets/.env');
+  final lines = raw.split('\n');
+  final map = <String, String>{};
+  for (var l in lines) {
+    if (!l.contains('=')) continue;
+    final parts = l.split('=');
+    map[parts[0]] = parts.sublist(1).join('=');
+  }
+  final apiKey = map['API_KEY']!;
   final apiClient = ApiClient(
     httpClient: http.Client(),
     baseUrl: 'https://shmr-finance.ru/api/v1',
