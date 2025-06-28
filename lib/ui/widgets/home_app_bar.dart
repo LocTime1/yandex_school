@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../core/models/transaction_type.dart';
 import '../../domain/repositories/bank_account_repository.dart';
-import '../models/history_model.dart';
 import '../screens/edit_account_screen.dart';
 import '../screens/history_screen.dart';
 

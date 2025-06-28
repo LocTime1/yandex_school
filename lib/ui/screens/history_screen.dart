@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import '../../core/models/transaction_type.dart';
 import '../models/history_model.dart';
 import '../widgets/transactions_list.dart';
+import 'analysis_screen.dart';
 
 class HistoryScreen extends StatelessWidget {
   final TransactionType type;
   final int accountId;
-  const HistoryScreen({super.key, required this.type, required this.accountId});
+  final int? categoryFilter;
+  const HistoryScreen({
+    super.key,
+    required this.type,
+    required this.accountId,
+    this.categoryFilter,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +26,7 @@ class HistoryScreen extends StatelessWidget {
             catRepo: ctx.read(),
             type: type,
             accountId: accountId,
+            categoryFilter: categoryFilter,
           ),
       child: const _HistoryView(),
     );
@@ -44,7 +53,17 @@ class _HistoryView extends StatelessWidget {
               color: Colors.grey,
               size: 28,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder:
+                      (ctx) => AnalysisScreen(
+                        type: model.type,
+                        accountId: model.accountId,
+                      ),
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -77,7 +96,7 @@ class _HistoryView extends StatelessWidget {
                       total: model.total,
                       items: model.items,
                       categories: model.categories,
-                      showHeader: false, 
+                      showHeader: false,
                     ),
                   ),
                 ],

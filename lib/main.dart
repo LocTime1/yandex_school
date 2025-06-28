@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:http/http.dart' as http;
 
 import 'data/datasources/api_client.dart';
@@ -28,6 +29,7 @@ import 'ui/screens/home_screen.dart';
 import 'data/repositories/api_bank_account_repository.dart';
 
 Future<void> main() async {
+  await initializeDateFormatting('ru', null);
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(CategoryAdapter());
@@ -81,10 +83,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Yandex Homework',
       theme: ThemeData(primarySwatch: Colors.green),
+      locale: const Locale('ru'),
       home: HomeScreen(),
     );
   }
 }
-
-
-
