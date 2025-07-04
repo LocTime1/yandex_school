@@ -43,7 +43,6 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                             idx == 0
                                 ? TransactionType.expense
                                 : TransactionType.income,
-                        accountId: accountId,
                       ),
                 ),
               );

@@ -70,7 +70,7 @@ _AppTransaction _$AppTransactionFromJson(Map<String, dynamic> json) =>
       id: (json['id'] as num).toInt(),
       accountId: (json['accountId'] as num).toInt(),
       categoryId: (json['categoryId'] as num).toInt(),
-      amount: (json['amount'] as num).toDouble(),
+      amount: _amountFromJson(json['amount']),
       transactionDate: DateTime.parse(json['transactionDate'] as String),
       comment: json['comment'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),

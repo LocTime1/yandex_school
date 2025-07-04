@@ -70,16 +70,20 @@ class HiveTransactionRepository implements TransactionRepository {
 
   @override
   Future<AppTransaction> createTransaction(AppTransaction t) async {
-    await _local.put(t);
-    return t;
+    final created = await _remote.createTransaction(t);
+    await _local.put(created);
+    return created;
   }
 
   @override
   Future<AppTransaction> updateTransaction(AppTransaction t) async {
-    await _local.put(t);
-    return t;
+    final updated = await _remote.updateTransaction(t);
+    await _local.put(updated);
+    return updated;
   }
 
-  @override
-  Future<void> deleteTransaction(int id) => _local.delete(id);
+  Future<void> deleteTransaction(int id) async {
+    await _remote.deleteTransaction(id);
+    await _local.delete(id);
+  }
 }

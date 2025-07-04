@@ -2,28 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/models/selected_account.dart';
 import '../../core/models/transaction_type.dart';
 import '../models/analysis_model.dart';
 import 'history_screen.dart';
 
 class AnalysisScreen extends StatelessWidget {
   final TransactionType type;
-  final int accountId;
-  const AnalysisScreen({
-    super.key,
-    required this.type,
-    required this.accountId,
-  });
+  const AnalysisScreen({super.key, required this.type});
 
   @override
   Widget build(BuildContext context) {
+    final account = context.watch<SelectedAccountNotifier>().account;
+    if (account == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     return ChangeNotifierProvider<AnalysisModel>(
       create:
           (ctx) => AnalysisModel(
             txRepo: ctx.read(),
             catRepo: ctx.read(),
             type: type,
-            accountId: accountId,
+            accountId: account.id,
           ),
       child: const _AnalysisView(),
     );
@@ -142,7 +142,6 @@ class _AnalysisView extends StatelessWidget {
                         builder:
                             (_) => HistoryScreen(
                               type: model.type,
-                              accountId: model.accountId,
                               categoryFilter: cat.id,
                             ),
                       ),

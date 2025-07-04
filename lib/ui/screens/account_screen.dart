@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
+import '../../core/models/selected_account.dart';
 import '../../domain/entities/bank_account.dart';
 import '../../domain/repositories/bank_account_repository.dart';
 
@@ -65,7 +66,9 @@ class _AccountScreenState extends State<AccountScreen> {
           return const Center(child: Text('Счёта не найдены'));
         }
         final acc = accounts.first;
-
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          context.read<SelectedAccountNotifier>().setAccount(acc);
+        });
         return Column(
           children: [
             Material(

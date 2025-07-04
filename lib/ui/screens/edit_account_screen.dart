@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/models/selected_account.dart';
 import '../../domain/entities/bank_account.dart';
 import '../../domain/repositories/bank_account_repository.dart';
 
@@ -41,6 +42,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
       updatedAt: DateTime.now(),
     );
     await context.read<BankAccountRepository>().updateAccount(updated);
+    context.read<SelectedAccountNotifier>().setAccount(updated);
     Navigator.pop(context);
   }
 
