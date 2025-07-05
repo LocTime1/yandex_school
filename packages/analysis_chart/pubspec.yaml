@@ -1,0 +1,9 @@
+name: analysis_chart
+description: Reusable animated pie chart for analysis screens
+version: 0.1.0
+environment:
+  sdk: ">=2.18.0 <3.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  fl_chart: ^1.0.0

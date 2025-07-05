@@ -11,6 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  analysis_chart:
+    path: packages/analysis_chart
+
   cupertino_icons: ^1.0.8
   provider: ^6.1.5
   freezed_annotation: ^3.0.0

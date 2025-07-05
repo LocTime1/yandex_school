@@ -14,6 +14,13 @@ packages:
     description: dart
     source: sdk
     version: "0.3.3"
+  analysis_chart:
+    dependency: "direct main"
+    description:
+      path: "packages/analysis_chart"
+      relative: true
+    source: path
+    version: "0.1.0"
   analyzer:
     dependency: transitive
     description:

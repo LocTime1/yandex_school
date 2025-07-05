@@ -1,7 +1,7 @@
+import 'package:analysis_chart/analysis_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-
 import '../../core/models/selected_account.dart';
 import '../../core/models/transaction_type.dart';
 import '../models/analysis_model.dart';
@@ -89,7 +89,22 @@ class _AnalysisView extends StatelessWidget {
             onTap: null,
           ),
           const Divider(height: 1, thickness: 1),
-          const SizedBox(height: 8),
+          const SizedBox(height: 35),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: AnalysisChart(
+              sections:
+                  model.grouped.entries.map((entry) {
+                    final cat = entry.key;
+                    final txs = entry.value;
+                    final sum = txs.fold<double>(
+                      0,
+                      (s, t) => s + t.amount.abs(),
+                    );
+                    return AnalysisSection(title: cat.name, value: sum);
+                  }).toList(),
+            ),
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: model.grouped.length,
