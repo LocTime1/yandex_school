@@ -3,19 +3,19 @@ import 'package:provider/provider.dart';
 import 'package:yandex_homework_1/ui/screens/articles_screen.dart';
 import 'package:yandex_homework_1/ui/screens/transactions_page.dart';
 
+import '../../core/models/transaction_type.dart';
 import '../widgets/home_app_bar.dart';
 import '../widgets/home_fab.dart';
 import 'account_screen.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
-  final _pages = const [
-    TransactionsPage(type: TransactionType.expense, accountId: 1),
-    TransactionsPage(type: TransactionType.income, accountId: 1),
-    AccountScreen(),
-    ArticlesScreen(),
-    Center(child: Text('Настройки')),
-  ];
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final _titles = [
     'Расходы сегодня',
     'Доходы сегодня',
@@ -26,6 +26,23 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _pages = [
+      TransactionsPage(
+        type: TransactionType.expense,
+        onChanged: () {
+          setState(() {});
+        },
+      ),
+      TransactionsPage(
+        type: TransactionType.income,
+        onChanged: () {
+          setState(() {});
+        },
+      ),
+      AccountScreen(),
+      ArticlesScreen(),
+      Center(child: Text('Настройки')),
+    ];
     final nav = context.watch<ValueNotifier<int>>();
     final idx = nav.value;
     return Scaffold(
@@ -81,9 +98,13 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: HomeFab(idx),
+      floatingActionButton: HomeFab(
+        idx,
+        onTransactionAdded: () {
+          setState(() {});
+        },
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
-

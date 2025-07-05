@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import '../../core/models/selected_account.dart';
 import '../../core/models/transaction_type.dart';
 import '../models/history_model.dart';
 import '../widgets/transactions_list.dart';
@@ -8,24 +9,22 @@ import 'analysis_screen.dart';
 
 class HistoryScreen extends StatelessWidget {
   final TransactionType type;
-  final int accountId;
   final int? categoryFilter;
-  const HistoryScreen({
-    super.key,
-    required this.type,
-    required this.accountId,
-    this.categoryFilter,
-  });
+  const HistoryScreen({super.key, required this.type, this.categoryFilter});
 
   @override
   Widget build(BuildContext context) {
+    final account = context.watch<SelectedAccountNotifier>().account;
+    if (account == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     return ChangeNotifierProvider<HistoryModel>(
       create:
           (ctx) => HistoryModel(
             txRepo: ctx.read(),
             catRepo: ctx.read(),
             type: type,
-            accountId: accountId,
+            accountId: account.id,
             categoryFilter: categoryFilter,
           ),
       child: const _HistoryView(),
@@ -56,11 +55,7 @@ class _HistoryView extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder:
-                      (ctx) => AnalysisScreen(
-                        type: model.type,
-                        accountId: model.accountId,
-                      ),
+                  builder: (ctx) => AnalysisScreen(type: model.type),
                 ),
               );
             },

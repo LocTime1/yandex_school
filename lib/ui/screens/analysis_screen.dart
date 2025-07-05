@@ -1,29 +1,29 @@
+import 'package:analysis_chart/analysis_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-
+import '../../core/models/selected_account.dart';
 import '../../core/models/transaction_type.dart';
 import '../models/analysis_model.dart';
 import 'history_screen.dart';
 
 class AnalysisScreen extends StatelessWidget {
   final TransactionType type;
-  final int accountId;
-  const AnalysisScreen({
-    super.key,
-    required this.type,
-    required this.accountId,
-  });
+  const AnalysisScreen({super.key, required this.type});
 
   @override
   Widget build(BuildContext context) {
+    final account = context.watch<SelectedAccountNotifier>().account;
+    if (account == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     return ChangeNotifierProvider<AnalysisModel>(
       create:
           (ctx) => AnalysisModel(
             txRepo: ctx.read(),
             catRepo: ctx.read(),
             type: type,
-            accountId: accountId,
+            accountId: account.id,
           ),
       child: const _AnalysisView(),
     );
@@ -89,7 +89,22 @@ class _AnalysisView extends StatelessWidget {
             onTap: null,
           ),
           const Divider(height: 1, thickness: 1),
-          const SizedBox(height: 8),
+          const SizedBox(height: 35),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: AnalysisChart(
+              sections:
+                  model.grouped.entries.map((entry) {
+                    final cat = entry.key;
+                    final txs = entry.value;
+                    final sum = txs.fold<double>(
+                      0,
+                      (s, t) => s + t.amount.abs(),
+                    );
+                    return AnalysisSection(title: cat.name, value: sum);
+                  }).toList(),
+            ),
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: model.grouped.length,
@@ -142,7 +157,6 @@ class _AnalysisView extends StatelessWidget {
                         builder:
                             (_) => HistoryScreen(
                               type: model.type,
-                              accountId: model.accountId,
                               categoryFilter: cat.id,
                             ),
                       ),

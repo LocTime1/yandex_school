@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
+import '../../core/models/selected_account.dart';
 import '../../domain/entities/bank_account.dart';
 import '../../domain/repositories/bank_account_repository.dart';
+import '../widgets/balance_chart.dart';
 
 const _currencies = <Map<String, String>>[
   {'label': 'Российский рубль ₽', 'code': '₽'},
@@ -65,7 +67,9 @@ class _AccountScreenState extends State<AccountScreen> {
           return const Center(child: Text('Счёта не найдены'));
         }
         final acc = accounts.first;
-
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          context.read<SelectedAccountNotifier>().setAccount(acc);
+        });
         return Column(
           children: [
             Material(
@@ -86,6 +90,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     value: acc.currency,
                     onTap: () => _showCurrencyPicker(context, acc),
                   ),
+                  const SizedBox(height: 30),
+                  const BalanceChart(),
                 ],
               ),
             ),

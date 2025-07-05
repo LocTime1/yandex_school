@@ -5,6 +5,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
 
+import 'core/models/selected_account.dart';
 import 'data/datasources/api_client.dart';
 import 'data/repositories/api_category_repository.dart';
 import 'data/repositories/api_transaction_repository.dart';
@@ -79,6 +80,23 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider<ValueNotifier<int>>(
           create: (_) => ValueNotifier<int>(0),
+        ),
+        ChangeNotifierProxyProvider<
+          BankAccountRepository,
+          SelectedAccountNotifier
+        >(
+          create: (_) => SelectedAccountNotifier(),
+          update: (ctx, bankRepo, notifier) {
+            final sel = notifier ?? SelectedAccountNotifier();
+            if (sel.account == null) {
+              bankRepo.getAllAccounts().then((list) {
+                if (list.isNotEmpty) {
+                  sel.setAccount(list.first);
+                }
+              });
+            }
+            return sel;
+          },
         ),
       ],
       child: const MyApp(),

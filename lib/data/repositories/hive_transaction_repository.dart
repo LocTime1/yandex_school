@@ -15,54 +15,19 @@ class HiveTransactionRepository implements TransactionRepository {
     required DateTime from,
     required DateTime to,
   }) async {
-    var all = await _local.getAll();
-
-    var filtered =
-        all.where((tx) {
-          return tx.accountId == accountId &&
-              !tx.transactionDate.isBefore(from) &&
-              !tx.transactionDate.isAfter(to);
-        }).toList();
-
-    if (filtered.isEmpty) {
-      final remoteList = await _remote.getTransactionsByAccountPeriod(
-        accountId: accountId,
-        from: from,
-        to: to,
-      );
-      for (var tx in remoteList) {
-        await _local.put(tx);
-      }
-      filtered = remoteList;
-    }
-
-    _syncInBackground(accountId: accountId, from: from, to: to);
-
-    return filtered;
-  }
-
-  void _syncInBackground({
-    required int accountId,
-    required DateTime from,
-    required DateTime to,
-  }) async {
-    try {
-      final fresh = await _remote.getTransactionsByAccountPeriod(
-        accountId: accountId,
-        from: from,
-        to: to,
-      );
-      await _local.boxClearAndPutAll(fresh);
-    } catch (_) {}
+    final remoteList = await _remote.getTransactionsByAccountPeriod(
+      accountId: accountId,
+      from: from,
+      to: to,
+    );
+    await _local.boxClearAndPutAll(remoteList);
+    return remoteList;
   }
 
   @override
   Future<AppTransaction> getTransactionById(int id) async {
     final localTx = await _local.getById(id);
-    if (localTx != null) {
-      return localTx;
-    }
-
+    if (localTx != null) return localTx;
     final remoteTx = await _remote.getTransactionById(id);
     await _local.put(remoteTx);
     return remoteTx;
@@ -70,16 +35,21 @@ class HiveTransactionRepository implements TransactionRepository {
 
   @override
   Future<AppTransaction> createTransaction(AppTransaction t) async {
-    await _local.put(t);
-    return t;
+    final created = await _remote.createTransaction(t);
+    await _local.put(created);
+    return created;
   }
 
   @override
   Future<AppTransaction> updateTransaction(AppTransaction t) async {
-    await _local.put(t);
-    return t;
+    final updated = await _remote.updateTransaction(t);
+    await _local.put(updated);
+    return updated;
   }
 
   @override
-  Future<void> deleteTransaction(int id) => _local.delete(id);
+  Future<void> deleteTransaction(int id) async {
+    await _remote.deleteTransaction(id);
+    await _local.delete(id);
+  }
 }

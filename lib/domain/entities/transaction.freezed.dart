@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AppTransaction {
 
-@HiveField(0) int get id;@HiveField(1) int get accountId;@HiveField(2) int get categoryId;@HiveField(3) double get amount;@HiveField(4) DateTime get transactionDate;@HiveField(5) String get comment;@HiveField(6) DateTime get createdAt;@HiveField(7) DateTime get updatedAt;
+@HiveField(0) int get id;@HiveField(1) int get accountId;@HiveField(2) int get categoryId;@HiveField(3)@JsonKey(fromJson: _amountFromJson) double get amount;@HiveField(4) DateTime get transactionDate;@HiveField(5) String get comment;@HiveField(6) DateTime get createdAt;@HiveField(7) DateTime get updatedAt;
 /// Create a copy of AppTransaction
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $AppTransactionCopyWith<$Res>  {
   factory $AppTransactionCopyWith(AppTransaction value, $Res Function(AppTransaction) _then) = _$AppTransactionCopyWithImpl;
 @useResult
 $Res call({
-@HiveField(0) int id,@HiveField(1) int accountId,@HiveField(2) int categoryId,@HiveField(3) double amount,@HiveField(4) DateTime transactionDate,@HiveField(5) String comment,@HiveField(6) DateTime createdAt,@HiveField(7) DateTime updatedAt
+@HiveField(0) int id,@HiveField(1) int accountId,@HiveField(2) int categoryId,@HiveField(3)@JsonKey(fromJson: _amountFromJson) double amount,@HiveField(4) DateTime transactionDate,@HiveField(5) String comment,@HiveField(6) DateTime createdAt,@HiveField(7) DateTime updatedAt
 });
 
 
@@ -87,13 +87,13 @@ as DateTime,
 @JsonSerializable()
 
 class _AppTransaction implements AppTransaction {
-  const _AppTransaction({@HiveField(0) required this.id, @HiveField(1) required this.accountId, @HiveField(2) required this.categoryId, @HiveField(3) required this.amount, @HiveField(4) required this.transactionDate, @HiveField(5) required this.comment, @HiveField(6) required this.createdAt, @HiveField(7) required this.updatedAt});
+  const _AppTransaction({@HiveField(0) required this.id, @HiveField(1) required this.accountId, @HiveField(2) required this.categoryId, @HiveField(3)@JsonKey(fromJson: _amountFromJson) required this.amount, @HiveField(4) required this.transactionDate, @HiveField(5) required this.comment, @HiveField(6) required this.createdAt, @HiveField(7) required this.updatedAt});
   factory _AppTransaction.fromJson(Map<String, dynamic> json) => _$AppTransactionFromJson(json);
 
 @override@HiveField(0) final  int id;
 @override@HiveField(1) final  int accountId;
 @override@HiveField(2) final  int categoryId;
-@override@HiveField(3) final  double amount;
+@override@HiveField(3)@JsonKey(fromJson: _amountFromJson) final  double amount;
 @override@HiveField(4) final  DateTime transactionDate;
 @override@HiveField(5) final  String comment;
 @override@HiveField(6) final  DateTime createdAt;
@@ -132,7 +132,7 @@ abstract mixin class _$AppTransactionCopyWith<$Res> implements $AppTransactionCo
   factory _$AppTransactionCopyWith(_AppTransaction value, $Res Function(_AppTransaction) _then) = __$AppTransactionCopyWithImpl;
 @override @useResult
 $Res call({
-@HiveField(0) int id,@HiveField(1) int accountId,@HiveField(2) int categoryId,@HiveField(3) double amount,@HiveField(4) DateTime transactionDate,@HiveField(5) String comment,@HiveField(6) DateTime createdAt,@HiveField(7) DateTime updatedAt
+@HiveField(0) int id,@HiveField(1) int accountId,@HiveField(2) int categoryId,@HiveField(3)@JsonKey(fromJson: _amountFromJson) double amount,@HiveField(4) DateTime transactionDate,@HiveField(5) String comment,@HiveField(6) DateTime createdAt,@HiveField(7) DateTime updatedAt
 });
 
 

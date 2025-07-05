@@ -4,6 +4,12 @@ import 'package:hive/hive.dart';
 part 'transaction.freezed.dart';
 part 'transaction.g.dart';
 
+double _amountFromJson(dynamic raw) {
+  if (raw is num) return raw.toDouble();
+  if (raw is String) return double.tryParse(raw) ?? 0.0;
+  throw FormatException('Cannot parse amount: $raw');
+}
+
 @HiveType(typeId: 2)
 @freezed
 abstract class AppTransaction with _$AppTransaction {
@@ -11,7 +17,7 @@ abstract class AppTransaction with _$AppTransaction {
     @HiveField(0) required int id,
     @HiveField(1) required int accountId,
     @HiveField(2) required int categoryId,
-    @HiveField(3) required double amount,
+    @HiveField(3) @JsonKey(fromJson: _amountFromJson) required double amount,
     @HiveField(4) required DateTime transactionDate,
     @HiveField(5) required String comment,
     @HiveField(6) required DateTime createdAt,

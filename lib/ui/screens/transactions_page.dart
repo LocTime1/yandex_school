@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../core/models/selected_account.dart';
+import '../../core/models/transaction_type.dart';
 import '../../domain/entities/transaction.dart';
 import '../../domain/entities/category.dart';
 import '../../domain/repositories/transaction_repository.dart';
 import '../../domain/repositories/category_repository.dart';
 import '../widgets/transactions_list.dart';
-
-enum TransactionType { expense, income }
+import 'transaction_edit_screen.dart';
 
 class TransactionsPage extends StatelessWidget {
   final TransactionType type;
-  final int accountId;
+  final VoidCallback? onChanged;
 
-  const TransactionsPage({
-    Key? key,
-    required this.type,
-    required this.accountId,
-  }) : super(key: key);
+  const TransactionsPage({Key? key, required this.type, this.onChanged})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final account = context.watch<SelectedAccountNotifier>().account;
+    if (account == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     final now = DateTime.now();
     final from = DateTime(now.year, now.month, now.day);
     final to = from
@@ -31,7 +33,7 @@ class TransactionsPage extends StatelessWidget {
 
     return FutureBuilder<List<AppTransaction>>(
       future: txRepo.getTransactionsByAccountPeriod(
-        accountId: accountId,
+        accountId: account.id,
         from: from,
         to: to,
       ),
@@ -40,7 +42,6 @@ class TransactionsPage extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         if (txSnap.hasError || txSnap.data == null) {
-          print("Ошибка транзакций: ${txSnap.error}");
           return const Center(child: CircularProgressIndicator());
         }
         final allTx = txSnap.data!;
@@ -52,15 +53,17 @@ class TransactionsPage extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
             if (catSnap.hasError || catSnap.data == null) {
-              print('Ошибка категорий: ${catSnap.error}');
               return const Center(child: CircularProgressIndicator());
             }
             final allCats = catSnap.data!;
             final ops =
                 allTx.where((tx) {
-                  final category = allCats.firstWhere(
-                    (c) => c.id == tx.categoryId,
-                  );
+                  Category? category;
+                  try {
+                    category = allCats.firstWhere((c) => c.id == tx.categoryId);
+                  } catch (_) {
+                    return false;
+                  }
                   return type == TransactionType.expense
                       ? !category.isIncome
                       : category.isIncome;
@@ -70,7 +73,22 @@ class TransactionsPage extends StatelessWidget {
               total: total,
               items: ops,
               categories: allCats,
-              onTap: (tx) {},
+              onTap: (tx) {
+                Navigator.of(context)
+                    .push(
+                      MaterialPageRoute(
+                        fullscreenDialog: true,
+                        builder:
+                            (_) =>
+                                TransactionEditScreen(editing: tx, type: type),
+                      ),
+                    )
+                    .then((updated) {
+                      if (updated != null) {
+                        onChanged?.call();
+                      }
+                    });
+              },
             );
           },
         );
