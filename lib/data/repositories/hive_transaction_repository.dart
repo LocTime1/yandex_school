@@ -15,54 +15,19 @@ class HiveTransactionRepository implements TransactionRepository {
     required DateTime from,
     required DateTime to,
   }) async {
-    var all = await _local.getAll();
-
-    var filtered =
-        all.where((tx) {
-          return tx.accountId == accountId &&
-              !tx.transactionDate.isBefore(from) &&
-              !tx.transactionDate.isAfter(to);
-        }).toList();
-
-    if (filtered.isEmpty) {
-      final remoteList = await _remote.getTransactionsByAccountPeriod(
-        accountId: accountId,
-        from: from,
-        to: to,
-      );
-      for (var tx in remoteList) {
-        await _local.put(tx);
-      }
-      filtered = remoteList;
-    }
-
-    _syncInBackground(accountId: accountId, from: from, to: to);
-
-    return filtered;
-  }
-
-  void _syncInBackground({
-    required int accountId,
-    required DateTime from,
-    required DateTime to,
-  }) async {
-    try {
-      final fresh = await _remote.getTransactionsByAccountPeriod(
-        accountId: accountId,
-        from: from,
-        to: to,
-      );
-      await _local.boxClearAndPutAll(fresh);
-    } catch (_) {}
+    final remoteList = await _remote.getTransactionsByAccountPeriod(
+      accountId: accountId,
+      from: from,
+      to: to,
+    );
+    await _local.boxClearAndPutAll(remoteList);
+    return remoteList;
   }
 
   @override
   Future<AppTransaction> getTransactionById(int id) async {
     final localTx = await _local.getById(id);
-    if (localTx != null) {
-      return localTx;
-    }
-
+    if (localTx != null) return localTx;
     final remoteTx = await _remote.getTransactionById(id);
     await _local.put(remoteTx);
     return remoteTx;
@@ -82,6 +47,7 @@ class HiveTransactionRepository implements TransactionRepository {
     return updated;
   }
 
+  @override
   Future<void> deleteTransaction(int id) async {
     await _remote.deleteTransaction(id);
     await _local.delete(id);
