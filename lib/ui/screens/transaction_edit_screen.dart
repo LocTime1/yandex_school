@@ -201,7 +201,7 @@ class _TransactionEditScreenState extends State<TransactionEditScreen> {
     await context.read<TransactionRepository>().deleteTransaction(
       widget.editing!.id,
     );
-    Navigator.of(context).pop(true);
+    Navigator.of(context).pop(widget.editing);
   }
 
   @override
