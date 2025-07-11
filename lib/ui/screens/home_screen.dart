@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -22,18 +24,39 @@ class _HomeScreenState extends State<HomeScreen> {
     'Статьи',
     'Настройки',
   ];
-  bool _isOffline = false;
+  bool _hasInternet = true;
+  StreamSubscription<List<ConnectivityResult>>? _connSub;
 
   @override
   void initState() {
     super.initState();
-    Connectivity().checkConnectivity().then((s) {
-      setState(() => _isOffline = s == ConnectivityResult.none);
+    _connSub = Connectivity().onConnectivityChanged.listen((
+      List<ConnectivityResult> statuses,
+    ) {
+      _checkInternet();
     });
-    Connectivity().onConnectivityChanged.listen((s) {
-      final offline = s == ConnectivityResult.none;
-      if (offline != _isOffline) setState(() => _isOffline = offline);
-    });
+    _checkInternet();
+  }
+
+  Future<void> _checkInternet() async {
+    bool prev = _hasInternet;
+    try {
+      final result = await InternetAddress.lookup(
+        '8.8.8.8',
+      ).timeout(const Duration(seconds: 5));
+      _hasInternet = result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } catch (_) {
+      _hasInternet = false;
+    }
+    if (prev != _hasInternet) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void dispose() {
+    _connSub?.cancel();
+    super.dispose();
   }
 
   @override
@@ -59,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: HomeAppBar(titles: _titles, idx: idx),
       body: Column(
         children: [
-          if (_isOffline)
+          if (!_hasInternet)
             Container(
               width: double.infinity,
               color: Colors.red,

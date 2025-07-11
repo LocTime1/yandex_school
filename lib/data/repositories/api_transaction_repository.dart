@@ -68,10 +68,12 @@ class ApiTransactionRepository implements TransactionRepository {
     final startDate = DateFormat('yyyy-MM-dd').format(from);
     final endDate = DateFormat('yyyy-MM-dd').format(to);
 
-    final raw = await _api.get<List<dynamic>>(
-      '/transactions/account/$accountId/period',
-      query: {'startDate': startDate, 'endDate': endDate},
-    );
+    final raw =
+        await _api.get(
+              '/transactions/account/$accountId/period',
+              query: {'startDate': startDate, 'endDate': endDate},
+            )
+            as List<dynamic>;
 
     final flat =
         raw.map((item) {

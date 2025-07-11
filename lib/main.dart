@@ -8,37 +8,36 @@ import 'core/models/selected_account.dart';
 
 import 'data/datasources/api_client.dart';
 import 'data/datasources/backup_ds.dart';
-import 'data/datasources/hive_category_ds.dart';
 import 'data/datasources/hive_transaction_ds.dart';
+import 'data/datasources/hive_category_ds.dart';
 import 'data/datasources/hive_bank_account_ds.dart';
 
-import 'data/repositories/api_category_repository.dart';
 import 'data/repositories/api_transaction_repository.dart';
-import 'data/repositories/api_bank_account_repository.dart';
-
-import 'data/repositories/hive_category_repository.dart';
 import 'data/repositories/transaction_repository_impl.dart';
+import 'data/repositories/api_category_repository.dart';
+import 'data/repositories/hive_category_repository.dart';
+import 'data/repositories/api_bank_account_repository.dart';
 import 'data/repositories/hive_bank_account_repository.dart';
 
 import 'data/services/sync_service.dart';
 
-import 'domain/repositories/category_repository.dart';
 import 'domain/repositories/transaction_repository.dart';
+import 'domain/repositories/category_repository.dart';
 import 'domain/repositories/bank_account_repository.dart';
 
-import 'domain/entities/category.dart';
 import 'domain/entities/transaction.dart';
+import 'domain/entities/category.dart';
 import 'domain/entities/bank_account.dart';
 
 import 'ui/screens/home_screen.dart';
 
 Future<void> main() async {
-  await initializeDateFormatting('ru', null);
   WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
+  await initializeDateFormatting('ru', null);
 
-  Hive.registerAdapter(CategoryAdapter());
+  await Hive.initFlutter();
   Hive.registerAdapter(AppTransactionAdapter());
+  Hive.registerAdapter(CategoryAdapter());
   Hive.registerAdapter(BankAccountAdapter());
 
   final raw = await rootBundle.loadString('assets/.env');
@@ -46,7 +45,7 @@ Future<void> main() async {
   for (var line in raw.split('\n')) {
     if (!line.contains('=')) continue;
     final parts = line.split('=');
-    map[parts[0]] = parts.sublist(1).join('=');
+    map[parts.first] = parts.sublist(1).join('=');
   }
   final apiKey = map['API_KEY']!;
 
@@ -61,15 +60,12 @@ Future<void> main() async {
     local: HiveTransactionDataSource(),
     remote: ApiTransactionRepository(apiClient),
     backup: backupDs,
-    apiClient: apiClient,
   );
 
   runApp(
     MultiProvider(
       providers: [
         Provider<ApiClient>.value(value: apiClient),
-
-        Provider<SyncService>(create: (_) => SyncService(backupDs, apiClient)),
 
         Provider<CategoryRepository>(
           create:
@@ -79,13 +75,22 @@ Future<void> main() async {
               ),
         ),
 
-        Provider<TransactionRepository>.value(value: txRepo),
-
         Provider<BankAccountRepository>(
           create:
-              (ctx) => HiveBankAccountRepository(
+              (_) => HiveBankAccountRepository(
                 HiveBankAccountDataSource(),
-                ApiBankAccountRepository(ctx.read<ApiClient>()),
+                ApiBankAccountRepository(apiClient),
+              ),
+        ),
+
+        Provider<TransactionRepository>.value(value: txRepo),
+
+        Provider<SyncService>(
+          create:
+              (_) => SyncService(
+                backupDs,
+                ApiTransactionRepository(apiClient),
+                HiveTransactionDataSource(),
               ),
         ),
 
@@ -99,7 +104,7 @@ Future<void> main() async {
         >(
           create: (_) => SelectedAccountNotifier(),
           update: (ctx, bankRepo, notifier) {
-            final sel = notifier ?? SelectedAccountNotifier();
+            final sel = notifier!;
             if (sel.account == null) {
               bankRepo.getAllAccounts().then((list) {
                 if (list.isNotEmpty) sel.setAccount(list.first);

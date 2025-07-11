@@ -20,40 +20,59 @@ class ApiClient {
            },
          ),
        ) {
-    _dio.interceptors.add(LogInterceptor(responseBody: true));
+    _dio.interceptors.add(
+      LogInterceptor(
+        requestHeader: false,
+        requestBody: true,
+        responseBody: true,
+        responseHeader: false,
+      ),
+    );
   }
 
-  Future<T> get<T>(String path, {Map<String, dynamic>? query}) {
-    return _retryRequest<T>(() => _dio.get(path, queryParameters: query));
+  Future<dynamic> get(String path, {Map<String, dynamic>? query}) {
+    return _retryRequest(() => _dio.get(path, queryParameters: query));
   }
 
-  Future<T> post<T>(String path, Map<String, dynamic> body) {
-    return _retryRequest<T>(() => _dio.post(path, data: body));
+  Future<dynamic> post(String path, Map<String, dynamic> body) {
+    return _retryRequest(
+      () => _dio.post(
+        path,
+        data: body,
+        options: Options(contentType: 'application/json'),
+      ),
+    );
   }
 
-  Future<T> put<T>(String path, Map<String, dynamic> body) {
-    return _retryRequest<T>(() => _dio.put(path, data: body));
+  Future<dynamic> put(String path, Map<String, dynamic> body) {
+    return _retryRequest(
+      () => _dio.put(
+        path,
+        data: body,
+        options: Options(contentType: 'application/json'),
+      ),
+    );
   }
 
   Future<void> delete(String path) {
-    return _retryRequest<void>(() => _dio.delete(path));
+    return _retryRequest(() => _dio.delete(path));
   }
 
-  Future<T> _retryRequest<T>(Future<Response> Function() requestFn) async {
+  Future<dynamic> _retryRequest(Future<Response> Function() requestFn) async {
     var attempt = 0;
     var delay = initialDelay;
 
     while (true) {
       try {
         final response = await requestFn();
-        return response.data as T;
+        return response.data;
       } on DioError catch (e) {
-        final code = e.response?.statusCode;
-        final isRetryableStatus =
-            code == null || [408, 429, 500, 502, 503, 504].contains(code);
+        final status = e.response?.statusCode;
+        final shouldRetry =
+            status == null || [408, 429, 500, 502, 503, 504].contains(status);
 
         attempt++;
-        if (attempt > maxRetries || !isRetryableStatus) {
+        if (attempt > maxRetries || !shouldRetry) {
           rethrow;
         }
         await Future.delayed(delay);

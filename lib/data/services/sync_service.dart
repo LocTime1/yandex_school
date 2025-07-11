@@ -1,32 +1,25 @@
+import 'dart:async';
+
 import '../datasources/backup_ds.dart';
-import '../datasources/api_client.dart';
-import '../datasources/operation.dart';
+import '../datasources/hive_transaction_ds.dart';
+import '../../domain/repositories/transaction_repository.dart';
 
 class SyncService {
   final BackupDataSource _backup;
-  final ApiClient _api;
+  final TransactionRepository _txRepo;
+  final HiveTransactionDataSource _local;
+  Timer? _timer;
 
-  SyncService(this._backup, this._api);
+  SyncService(this._backup, this._txRepo, this._local) {
+    _timer = Timer.periodic(const Duration(minutes: 1), (_) => sync());
+    sync();
+  }
 
-  Future<void> syncPending() async {
-    final ops = await _backup.loadAll();
-    for (final op in ops) {
-      try {
-        switch (op.type) {
-          case OperationType.create:
-            await _api.post(op.endpoint, op.payload!);
-            break;
-          case OperationType.update:
-            await _api.put(op.endpoint, op.payload!);
-            break;
-          case OperationType.delete:
-            await _api.delete(op.endpoint);
-            break;
-        }
-        await _backup.remove(op.id);
-      } catch (e) {
-        rethrow;
-      }
-    }
+  Future<void> sync() async {
+    await _backup.syncPending(_txRepo, _local);
+  }
+
+  void dispose() {
+    _timer?.cancel();
   }
 }
