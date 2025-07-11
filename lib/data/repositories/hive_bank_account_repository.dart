@@ -17,20 +17,28 @@ class HiveBankAccountRepository implements BankAccountRepository {
       _syncInBackground();
       return local;
     }
-    final remote = await _remote.getAllAccounts();
-    for (var acc in remote) {
-      await _local.put(acc);
+    try {
+      final remote = await _remote.getAllAccounts();
+      for (var acc in remote) {
+        await _local.put(acc);
+      }
+      return remote;
+    } catch (e, st) {
+      return local;
     }
-    return remote;
   }
 
   @override
   Future<BankAccount> getAccountById(int id) async {
     final local = await _local.getById(id);
     if (local != null) return local;
-    final remote = await _remote.getAccountById(id);
-    await _local.put(remote);
-    return remote;
+    try {
+      final remote = await _remote.getAccountById(id);
+      await _local.put(remote);
+      return remote;
+    } catch (e, st) {
+      throw e;
+    }
   }
 
   @override
@@ -56,8 +64,11 @@ class HiveBankAccountRepository implements BankAccountRepository {
 
   @override
   Future<List<AccountHistory>> getAccountHistory(int accountId) async {
-    final remote = await _remote.getAccountHistory(accountId);
-    return remote;
+    try {
+      return await _remote.getAccountHistory(accountId);
+    } catch (e, st) {
+      return [];
+    }
   }
 
   void _syncInBackground() async {

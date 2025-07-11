@@ -10,7 +10,7 @@ class ApiCategoryRepository implements CategoryRepository {
   @override
   Future<List<Category>> getAllCategories() async {
     final data = await _api.get('/categories');
-    return (data as List<dynamic>)
+    return (data as List)
         .map((e) => Category.fromJson(e as Map<String, dynamic>))
         .toList();
   }
