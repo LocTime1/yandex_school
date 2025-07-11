@@ -3,32 +3,27 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:worker_manager/worker_manager.dart';
 
 import 'core/models/selected_account.dart';
-
 import 'data/datasources/api_client.dart';
 import 'data/datasources/backup_ds.dart';
 import 'data/datasources/hive_transaction_ds.dart';
 import 'data/datasources/hive_category_ds.dart';
 import 'data/datasources/hive_bank_account_ds.dart';
-
 import 'data/repositories/api_transaction_repository.dart';
 import 'data/repositories/transaction_repository_impl.dart';
 import 'data/repositories/api_category_repository.dart';
 import 'data/repositories/hive_category_repository.dart';
 import 'data/repositories/api_bank_account_repository.dart';
 import 'data/repositories/hive_bank_account_repository.dart';
-
 import 'data/services/sync_service.dart';
-
 import 'domain/repositories/transaction_repository.dart';
 import 'domain/repositories/category_repository.dart';
 import 'domain/repositories/bank_account_repository.dart';
-
 import 'domain/entities/transaction.dart';
 import 'domain/entities/category.dart';
 import 'domain/entities/bank_account.dart';
-
 import 'ui/screens/home_screen.dart';
 
 Future<void> main() async {
@@ -39,6 +34,9 @@ Future<void> main() async {
   Hive.registerAdapter(AppTransactionAdapter());
   Hive.registerAdapter(CategoryAdapter());
   Hive.registerAdapter(BankAccountAdapter());
+
+  workerManager.log = false;
+  await workerManager.init();
 
   final raw = await rootBundle.loadString('assets/.env');
   final map = <String, String>{};
@@ -66,7 +64,6 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         Provider<ApiClient>.value(value: apiClient),
-
         Provider<CategoryRepository>(
           create:
               (_) => HiveCategoryRepository(
@@ -74,7 +71,6 @@ Future<void> main() async {
                 ApiCategoryRepository(apiClient),
               ),
         ),
-
         Provider<BankAccountRepository>(
           create:
               (_) => HiveBankAccountRepository(
@@ -82,29 +78,21 @@ Future<void> main() async {
                 ApiBankAccountRepository(apiClient),
               ),
         ),
-
         Provider<TransactionRepository>.value(value: txRepo),
-
         Provider<SyncService>(
           create:
-              (_) => SyncService(
-                backupDs,
-                ApiTransactionRepository(apiClient),
-                HiveTransactionDataSource(),
-              ),
+              (_) => SyncService(backupDs, txRepo, HiveTransactionDataSource()),
         ),
-
         ChangeNotifierProvider<ValueNotifier<int>>(
           create: (_) => ValueNotifier<int>(0),
         ),
-
         ChangeNotifierProxyProvider<
           BankAccountRepository,
           SelectedAccountNotifier
         >(
           create: (_) => SelectedAccountNotifier(),
           update: (ctx, bankRepo, notifier) {
-            final sel = notifier!;
+            final sel = notifier ?? SelectedAccountNotifier();
             if (sel.account == null) {
               bankRepo.getAllAccounts().then((list) {
                 if (list.isNotEmpty) sel.setAccount(list.first);

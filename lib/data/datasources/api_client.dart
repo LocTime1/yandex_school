@@ -1,5 +1,7 @@
-import 'dart:async';
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
+import 'package:worker_manager/worker_manager.dart';
 
 class ApiClient {
   final Dio _dio;
@@ -20,59 +22,52 @@ class ApiClient {
            },
          ),
        ) {
+    _dio.interceptors.add(LogInterceptor(responseBody: true));
+
     _dio.interceptors.add(
-      LogInterceptor(
-        requestHeader: false,
-        requestBody: true,
-        responseBody: true,
-        responseHeader: false,
+      InterceptorsWrapper(
+        onResponse: (response, handler) async {
+          if (response.data is String) {
+            final jsonStr = response.data as String;
+            final decoded = await workerManager.execute<Map<String, dynamic>>(
+              () => jsonDecode(jsonStr) as Map<String, dynamic>,
+              priority: WorkPriority.immediately,
+            );
+            response.data = decoded;
+          }
+          handler.next(response);
+        },
       ),
     );
   }
 
-  Future<dynamic> get(String path, {Map<String, dynamic>? query}) {
-    return _retryRequest(() => _dio.get(path, queryParameters: query));
-  }
+  Future<T> get<T>(String path, {Map<String, dynamic>? query}) =>
+      _retryRequest<T>(() => _dio.get(path, queryParameters: query));
 
-  Future<dynamic> post(String path, Map<String, dynamic> body) {
-    return _retryRequest(
-      () => _dio.post(
-        path,
-        data: body,
-        options: Options(contentType: 'application/json'),
-      ),
-    );
-  }
+  Future<T> post<T>(String path, Map<String, dynamic> body) =>
+      _retryRequest<T>(() => _dio.post(path, data: body));
 
-  Future<dynamic> put(String path, Map<String, dynamic> body) {
-    return _retryRequest(
-      () => _dio.put(
-        path,
-        data: body,
-        options: Options(contentType: 'application/json'),
-      ),
-    );
-  }
+  Future<T> put<T>(String path, Map<String, dynamic> body) =>
+      _retryRequest<T>(() => _dio.put(path, data: body));
 
-  Future<void> delete(String path) {
-    return _retryRequest(() => _dio.delete(path));
-  }
+  Future<void> delete(String path) =>
+      _retryRequest<void>(() => _dio.delete(path));
 
-  Future<dynamic> _retryRequest(Future<Response> Function() requestFn) async {
+  Future<T> _retryRequest<T>(Future<Response> Function() requestFn) async {
     var attempt = 0;
     var delay = initialDelay;
 
     while (true) {
       try {
         final response = await requestFn();
-        return response.data;
+        return response.data as T;
       } on DioError catch (e) {
-        final status = e.response?.statusCode;
-        final shouldRetry =
-            status == null || [408, 429, 500, 502, 503, 504].contains(status);
+        final code = e.response?.statusCode;
+        final isRetryable =
+            code == null || [408, 429, 500, 502, 503, 504].contains(code);
 
         attempt++;
-        if (attempt > maxRetries || !shouldRetry) {
+        if (attempt > maxRetries || !isRetryable) {
           rethrow;
         }
         await Future.delayed(delay);
