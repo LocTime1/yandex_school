@@ -25,6 +25,10 @@ dependencies:
   sensors_plus: ^6.1.1
   fuzzy: ^0.5.1
   fl_chart: ^1.0.0
+  dio: ^5.8.0+1
+  uuid: ^4.5.1
+  connectivity_plus: ^6.1.4
+  worker_manager: ^7.2.6
 
 dev_dependencies:
   flutter_test:

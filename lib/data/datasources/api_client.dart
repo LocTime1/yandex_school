@@ -1,78 +1,78 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+
+import 'package:dio/dio.dart';
+import 'package:worker_manager/worker_manager.dart';
 
 class ApiClient {
-  final http.Client _http;
-  final String baseUrl;
-  final String apiKey;
+  final Dio _dio;
+  final int maxRetries;
+  final Duration initialDelay;
 
   ApiClient({
-    required http.Client httpClient,
-    required this.baseUrl,
-    required this.apiKey,
-  }) : _http = httpClient;
+    required String baseUrl,
+    required String apiKey,
+    this.maxRetries = 3,
+    this.initialDelay = const Duration(seconds: 1),
+  }) : _dio = Dio(
+         BaseOptions(
+           baseUrl: baseUrl,
+           headers: {
+             'Authorization': 'Bearer $apiKey',
+             'Accept': 'application/json',
+           },
+         ),
+       ) {
+    _dio.interceptors.add(LogInterceptor(responseBody: true));
 
-  Future<dynamic> get(String path, [Map<String, String>? query]) async {
-    final uri = Uri.parse('$baseUrl$path').replace(queryParameters: query);
-    print(uri);
-    final resp = await _http.get(
-      uri,
-      headers: {
-        'Authorization': 'Bearer $apiKey',
-        'Accept': 'application/json',
-      },
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onResponse: (response, handler) async {
+          if (response.data is String) {
+            final jsonStr = response.data as String;
+            final decoded = await workerManager.execute<Map<String, dynamic>>(
+              () => jsonDecode(jsonStr) as Map<String, dynamic>,
+              priority: WorkPriority.immediately,
+            );
+            response.data = decoded;
+          }
+          handler.next(response);
+        },
+      ),
     );
-    if (resp.statusCode < 200 || resp.statusCode >= 300) {
-      throw Exception('API GET $path → ${resp.statusCode}');
-    }
-    return jsonDecode(resp.body);
   }
 
-  Future<dynamic> post(String path, Map<String, dynamic> body) async {
-    final uri = Uri.parse('$baseUrl$path');
-    final resp = await _http.post(
-      uri,
-      headers: {
-        'Authorization': 'Bearer $apiKey',
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: jsonEncode(body),
-    );
-    if (resp.statusCode < 200 || resp.statusCode >= 300) {
-      throw Exception('API POST $path → ${resp.statusCode}');
-    }
-    return jsonDecode(resp.body);
-  }
+  Future<T> get<T>(String path, {Map<String, dynamic>? query}) =>
+      _retryRequest<T>(() => _dio.get(path, queryParameters: query));
 
-  Future<dynamic> put(String path, Map<String, dynamic> body) async {
-    final uri = Uri.parse('$baseUrl$path');
-    final resp = await _http.put(
-      uri,
-      headers: {
-        'Authorization': 'Bearer $apiKey',
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: jsonEncode(body),
-    );
-    if (resp.statusCode < 200 || resp.statusCode >= 300) {
-      throw Exception('API PUT $path → ${resp.statusCode}');
-    }
-    return jsonDecode(resp.body);
-  }
+  Future<T> post<T>(String path, Map<String, dynamic> body) =>
+      _retryRequest<T>(() => _dio.post(path, data: body));
 
-  Future<void> delete(String path) async {
-    final uri = Uri.parse('$baseUrl$path');
-    final resp = await _http.delete(
-      uri,
-      headers: {
-        'Authorization': 'Bearer $apiKey',
-        'Accept': 'application/json',
-      },
-    );
-    if (resp.statusCode < 200 || resp.statusCode >= 300) {
-      throw Exception('API DELETE $path → ${resp.statusCode}');
+  Future<T> put<T>(String path, Map<String, dynamic> body) =>
+      _retryRequest<T>(() => _dio.put(path, data: body));
+
+  Future<void> delete(String path) =>
+      _retryRequest<void>(() => _dio.delete(path));
+
+  Future<T> _retryRequest<T>(Future<Response> Function() requestFn) async {
+    var attempt = 0;
+    var delay = initialDelay;
+
+    while (true) {
+      try {
+        final response = await requestFn();
+        return response.data as T;
+      } on DioError catch (e) {
+        final code = e.response?.statusCode;
+        final isRetryable =
+            code == null || [408, 429, 500, 502, 503, 504].contains(code);
+
+        attempt++;
+        if (attempt > maxRetries || !isRetryable) {
+          rethrow;
+        }
+        await Future.delayed(delay);
+        delay *= 2;
+      }
     }
   }
 }

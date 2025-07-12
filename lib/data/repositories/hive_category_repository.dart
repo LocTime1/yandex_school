@@ -16,9 +16,13 @@ class HiveCategoryRepository implements CategoryRepository {
       _syncInBackground();
       return localCats;
     }
-    final remoteCats = await _remote.getAllCategories();
-    await _local.saveAll(remoteCats);
-    return remoteCats;
+    try {
+      final remoteCats = await _remote.getAllCategories();
+      await _local.saveAll(remoteCats);
+      return remoteCats;
+    } catch (_) {
+      return [];
+    }
   }
 
   @override

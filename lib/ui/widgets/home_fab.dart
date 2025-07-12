@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../core/models/selected_account.dart';
 import '../../core/models/transaction_type.dart';
+import '../../domain/entities/transaction.dart';
+import '../../domain/repositories/transaction_repository.dart';
 import '../screens/transaction_edit_screen.dart';
 
 class HomeFab extends StatelessWidget {
@@ -26,15 +29,18 @@ class HomeFab extends StatelessWidget {
         return RawMaterialButton(
           onPressed: () {
             Navigator.of(context)
-                .push(
+                .push<AppTransaction>(
                   MaterialPageRoute(
                     fullscreenDialog: true,
                     builder:
                         (_) => TransactionEditScreen(editing: null, type: type),
                   ),
                 )
-                .then((created) {
-                  if (created != null) {
+                .then((result) async {
+                  if (result != null) {
+                    await context
+                        .read<TransactionRepository>()
+                        .createTransaction(result);
                     onTransactionAdded?.call();
                   }
                 });
