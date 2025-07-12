@@ -54,9 +54,11 @@ Future<void> main() async {
 
   final backupDs = BackupDataSource();
 
+  final apiTxRepo = ApiTransactionRepository(apiClient);
+
   final txRepo = TransactionRepositoryImpl(
     local: HiveTransactionDataSource(),
-    remote: ApiTransactionRepository(apiClient),
+    remote: apiTxRepo,
     backup: backupDs,
   );
 
@@ -81,7 +83,8 @@ Future<void> main() async {
         Provider<TransactionRepository>.value(value: txRepo),
         Provider<SyncService>(
           create:
-              (_) => SyncService(backupDs, txRepo, HiveTransactionDataSource()),
+              (_) =>
+                  SyncService(backupDs, apiTxRepo, HiveTransactionDataSource()),
         ),
         ChangeNotifierProvider<ValueNotifier<int>>(
           create: (_) => ValueNotifier<int>(0),

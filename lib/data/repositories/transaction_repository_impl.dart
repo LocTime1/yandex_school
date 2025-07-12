@@ -67,8 +67,13 @@ class TransactionRepositoryImpl implements TransactionRepository {
 
     try {
       final created = await _remote.createTransaction(t);
+
+      await _local.delete(t.id);
+
       await _local.put(created);
-      await _backup.removeCreateOperation(created.id);
+
+      await _backup.removeCreateOperation(t.id);
+
       return created;
     } catch (_) {
       return t;
