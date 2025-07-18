@@ -27,6 +27,7 @@ import 'domain/entities/category.dart';
 import 'domain/entities/bank_account.dart';
 import 'ui/screens/app_guard.dart';
 import 'ui/theme/app_theme.dart';
+import 'ui/widgets/blur_on_inactive.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -131,7 +132,9 @@ class MyApp extends StatelessWidget {
           themeMode:
               settings.useSystemTheme ? ThemeMode.system : ThemeMode.light,
           locale: const Locale('ru'),
-          home: AppGuard(),
+          home: BlurOnInactive(
+            child: AppGuard(),
+          ),
         );
       },
     );
