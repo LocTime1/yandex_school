@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../core/models/selected_account.dart';
 import '../../core/models/transaction_type.dart';
+import '../../l10n/app_localizations.dart';
 import '../models/history_model.dart';
 import '../widgets/transactions_list.dart';
 import 'analysis_screen.dart';
@@ -42,14 +43,14 @@ class _HistoryView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Моя история'),
+        title:  Text(AppLocalizations.of(context)!.myHistory),
         centerTitle: true,
-        backgroundColor: const Color(0xFF00FE81),
+        backgroundColor: Theme.of(context).colorScheme.primary,
         actions: [
           IconButton(
-            icon: const Icon(
+            icon:  Icon(
               Icons.calendar_today,
-              color: Colors.grey,
+              color: Theme.of(context).colorScheme.onSurface,
               size: 28,
             ),
             onPressed: () {
@@ -70,20 +71,20 @@ class _HistoryView extends StatelessWidget {
               : Column(
                 children: [
                   ListTile(
-                    title: const Text('Начало'),
-                    tileColor: const Color.fromRGBO(0, 254, 129, 0.25),
+                    title:  Text(AppLocalizations.of(context)!.start),
+                    tileColor: Theme.of(context).colorScheme.secondary,
                     trailing: Text(fmt.format(model.startDate)),
                     onTap: () => _pickDate(context, model, isStart: true),
                   ),
                   ListTile(
-                    title: const Text('Конец'),
-                    tileColor: const Color.fromRGBO(0, 254, 129, 0.25),
+                    title:  Text(AppLocalizations.of(context)!.end),
+                    tileColor: Theme.of(context).colorScheme.secondary,
                     trailing: Text(fmt.format(model.endDate)),
                     onTap: () => _pickDate(context, model, isStart: false),
                   ),
                   ListTile(
-                    title: const Text('Сумма'),
-                    tileColor: const Color.fromRGBO(0, 254, 129, 0.25),
+                    title: Text(AppLocalizations.of(context)!.total),
+                    tileColor: Theme.of(context).colorScheme.secondary,
                     trailing: Text('${model.total.toStringAsFixed(0)} ₽'),
                   ),
                   Expanded(

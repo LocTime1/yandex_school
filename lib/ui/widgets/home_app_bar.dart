@@ -22,7 +22,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(titles[idx]),
       centerTitle: true,
-      backgroundColor: const Color(0xFF00FE81),
+      backgroundColor: Theme.of(context).colorScheme.primary,
       actions: _buildActions(context, idx),
     );
   }
@@ -87,7 +87,7 @@ class _AppBarIcon extends StatelessWidget {
     return IconButton(
       onPressed: onPressed,
       padding: const EdgeInsets.only(right: 15),
-      icon: Icon(icon, color: Colors.grey[800], size: 30),
+      icon: Icon(icon, color: Theme.of(context).colorScheme.onPrimary, size: 30),
     );
   }
 }

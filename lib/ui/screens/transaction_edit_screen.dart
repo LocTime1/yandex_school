@@ -8,6 +8,7 @@ import '../../domain/repositories/transaction_repository.dart';
 import '../../domain/repositories/category_repository.dart';
 import '../../core/models/selected_account.dart';
 import '../../core/models/transaction_type.dart';
+import '../../l10n/app_localizations.dart';
 
 class TransactionEditScreen extends StatefulWidget {
   final AppTransaction? editing;
@@ -61,7 +62,7 @@ class _TransactionEditScreenState extends State<TransactionEditScreen> {
       context: context,
       builder:
           (_) => SimpleDialog(
-            title: const Text('Счёт'),
+            title: Text(AppLocalizations.of(context)!.accountTitle),
             children: [
               SimpleDialogOption(
                 child: Text(_account.name),
@@ -84,7 +85,7 @@ class _TransactionEditScreenState extends State<TransactionEditScreen> {
       context: context,
       builder:
           (_) => SimpleDialog(
-            title: const Text('Статья'),
+            title: Text(AppLocalizations.of(context)!.categoryTitle),
             children:
                 choices
                     .map(
@@ -109,7 +110,7 @@ class _TransactionEditScreenState extends State<TransactionEditScreen> {
           text: _amount?.toStringAsFixed(2) ?? '',
         );
         return AlertDialog(
-          title: const Text('Сумма'),
+          title: Text(AppLocalizations.of(context)!.amountTitle),
           content: TextField(
             controller: ctl,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -118,11 +119,11 @@ class _TransactionEditScreenState extends State<TransactionEditScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Отмена'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, ctl.text.trim()),
-              child: const Text('OK'),
+              child: Text(AppLocalizations.of(context)!.ok),
             ),
           ],
         );
@@ -158,11 +159,11 @@ class _TransactionEditScreenState extends State<TransactionEditScreen> {
         context: context,
         builder:
             (_) => AlertDialog(
-              title: const Text('Заполните все поля'),
+              title: Text(AppLocalizations.of(context)!.fillAllFields),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('ОК'),
+                  child:  Text(AppLocalizations.of(context)!.ok),
                 ),
               ],
             ),
@@ -212,13 +213,13 @@ class _TransactionEditScreenState extends State<TransactionEditScreen> {
     final isEd = widget.editing != null;
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEd ? 'Редактировать' : 'Новая операция'),
+        title: Text(isEd ? AppLocalizations.of(context)!.edit : AppLocalizations.of(context)!.newOperation),
         centerTitle: true,
-        backgroundColor: const Color(0xFF00FE81),
-        leading: const CloseButton(color: Colors.black),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        leading:  CloseButton(color: Theme.of(context).colorScheme.onSurface),
         actions: [
           IconButton(
-            icon: const Icon(Icons.check, color: Colors.black),
+            icon: Icon(Icons.check, color: Theme.of(context).colorScheme.onSurface),
             onPressed: _save,
           ),
         ],
@@ -226,7 +227,7 @@ class _TransactionEditScreenState extends State<TransactionEditScreen> {
       body: ListView(
         children: [
           ListTile(
-            title: const Text('Счёт'),
+            title: Text(AppLocalizations.of(context)!.account),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -239,7 +240,7 @@ class _TransactionEditScreenState extends State<TransactionEditScreen> {
           ),
           const Divider(height: 1),
           ListTile(
-            title: const Text('Статья'),
+            title: Text(AppLocalizations.of(context)!.articles),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -256,7 +257,7 @@ class _TransactionEditScreenState extends State<TransactionEditScreen> {
           ),
           const Divider(height: 1),
           ListTile(
-            title: const Text('Сумма'),
+            title: Text(AppLocalizations.of(context)!.total),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -269,7 +270,7 @@ class _TransactionEditScreenState extends State<TransactionEditScreen> {
           ),
           const Divider(height: 1),
           ListTile(
-            title: const Text('Дата'),
+            title: Text(AppLocalizations.of(context)!.dateTitle),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -282,7 +283,7 @@ class _TransactionEditScreenState extends State<TransactionEditScreen> {
           ),
           const Divider(height: 1),
           ListTile(
-            title: const Text('Время'),
+            title: Text(AppLocalizations.of(context)!.timeTitle),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -295,7 +296,7 @@ class _TransactionEditScreenState extends State<TransactionEditScreen> {
           ),
           const Divider(height: 1),
           ListTile(
-            title: const Text('Комментарий'),
+            title: Text(AppLocalizations.of(context)!.commentTitle),
             subtitle: Text(_comment ?? ''),
             onTap: () async {
               final res = await showDialog<String>(
@@ -303,22 +304,22 @@ class _TransactionEditScreenState extends State<TransactionEditScreen> {
                 builder: (_) {
                   final ctl = TextEditingController(text: _comment);
                   return AlertDialog(
-                    title: const Text('Комментарий'),
+                    title: Text(AppLocalizations.of(context)!.commentTitle),
                     content: TextField(
                       controller: ctl,
-                      decoration: const InputDecoration(
-                        hintText: 'Комментарий',
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.of(context)!.commentTitle,
                       ),
                     ),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(context),
-                        child: const Text('Отмена'),
+                        child: Text(AppLocalizations.of(context)!.cancel),
                       ),
                       TextButton(
                         onPressed:
                             () => Navigator.pop(context, ctl.text.trim()),
-                        child: const Text('OK'),
+                        child: Text(AppLocalizations.of(context)!.ok),
                       ),
                     ],
                   );
@@ -333,14 +334,14 @@ class _TransactionEditScreenState extends State<TransactionEditScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.redAccent,
+                  backgroundColor: Theme.of(context).colorScheme.onError,
                 ),
                 onPressed: _delete,
                 icon: const Icon(Icons.delete),
                 label: Text(
                   widget.type == TransactionType.expense
-                      ? 'Удалить расход'
-                      : 'Удалить доход',
+                      ? AppLocalizations.of(context)!.deleteExpense
+                      : AppLocalizations.of(context)!.deleteIncome,
                 ),
               ),
             ),

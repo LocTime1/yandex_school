@@ -8,6 +8,7 @@ import '../../domain/entities/category.dart';
 import '../../domain/repositories/transaction_repository.dart';
 import '../../domain/repositories/category_repository.dart';
 import '../../data/repositories/transaction_repository_impl.dart';
+import '../../l10n/app_localizations.dart';
 import '../widgets/transactions_list.dart';
 import 'transaction_edit_screen.dart';
 
@@ -41,7 +42,7 @@ class TransactionsPage extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         if (catSnap.hasError || catSnap.data == null) {
-          return const Center(child: Text('Ошибка загрузки категорий'));
+          return  Center(child: Text(AppLocalizations.of(context)!.errorCategory));
         }
         final categories = catSnap.data!;
 
@@ -76,13 +77,13 @@ class TransactionsPage extends StatelessWidget {
                 children: [
                   Container(
                     width: double.infinity,
-                    color: Colors.red,
+                    color: Theme.of(context).colorScheme.error,
                     padding: const EdgeInsets.all(8),
                     alignment: Alignment.center,
-                    child: const Text(
-                      'Offline mode',
+                    child: Text(
+                      AppLocalizations.of(context)!.offlineMode,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.onError,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -114,8 +115,8 @@ class TransactionsPage extends StatelessWidget {
               );
             }
             if (txSnap.hasError || txSnap.data == null) {
-              return const Center(
-                child: Text('Ошибка при загрузке транзакций'),
+              return  Center(
+                child: Text(AppLocalizations.of(context)!.errorTransaction),
               );
             }
 

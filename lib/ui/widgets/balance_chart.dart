@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../core/models/selected_account.dart';
 import '../../domain/repositories/transaction_repository.dart';
+import '../../l10n/app_localizations.dart';
 
 class BalanceChart extends StatefulWidget {
   const BalanceChart({Key? key}) : super(key: key);
@@ -82,7 +83,7 @@ class _BalanceChartState extends State<BalanceChart> {
         ),
       );
     });
-
+    if (!mounted) return;
     setState(() {
       _bars = bars;
       _labels = labels;
@@ -100,22 +101,23 @@ class _BalanceChartState extends State<BalanceChart> {
     final maxY = _bars.map((b) => b.barRods.first.toY).reduce(max) * 1.1;
 
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).scaffoldBackgroundColor,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         children: [
           CupertinoSegmentedControl<bool>(
-            selectedColor: Color.fromRGBO(42, 232, 129, 1),
-            borderColor: Color.fromRGBO(42, 232, 129, 1),
+            selectedColor: Theme.of(context).colorScheme.primary,
+            unselectedColor: Theme.of(context).scaffoldBackgroundColor,
+            borderColor: Theme.of(context).colorScheme.primary,
             groupValue: _byMonth,
-            children: const {
+            children: {
               false: Padding(
                 padding: EdgeInsets.all(6),
-                child: Text('По дням'),
+                child: Text(AppLocalizations.of(context)!.byDay),
               ),
               true: Padding(
                 padding: EdgeInsets.all(6),
-                child: Text('По месяцам'),
+                child: Text(AppLocalizations.of(context)!.byMonth),
               ),
             },
             onValueChanged: (v) {
@@ -176,7 +178,7 @@ class _BalanceChartState extends State<BalanceChart> {
                       final val = rod.toY.toStringAsFixed(0);
                       return BarTooltipItem(
                         '$label\n$val ₽',
-                        const TextStyle(color: Colors.white),
+                         TextStyle(color: Theme.of(context).colorScheme.onSurface),
                       );
                     },
                   ),

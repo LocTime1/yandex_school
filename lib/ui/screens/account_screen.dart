@@ -8,6 +8,7 @@ import 'package:sensors_plus/sensors_plus.dart';
 import '../../core/models/selected_account.dart';
 import '../../domain/entities/bank_account.dart';
 import '../../domain/repositories/bank_account_repository.dart';
+import '../../l10n/app_localizations.dart';
 import '../widgets/balance_chart.dart';
 
 const _currencies = <Map<String, String>>[
@@ -64,7 +65,7 @@ class _AccountScreenState extends State<AccountScreen> {
         }
         final accounts = snap.data!;
         if (accounts.isEmpty) {
-          return const Center(child: Text('Счёта не найдены'));
+          return Center(child: Text(AppLocalizations.of(context)!.notFound));
         }
         final acc = accounts.first;
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -73,7 +74,7 @@ class _AccountScreenState extends State<AccountScreen> {
         return Column(
           children: [
             Material(
-              color: const Color(0xFFBDFBE6),
+              color: Theme.of(context).colorScheme.secondary,
               child: Column(
                 children: [
                   _BalanceTile(
@@ -132,11 +133,11 @@ class _AccountScreenState extends State<AccountScreen> {
                   );
                 }),
                 ListTile(
-                  tileColor: Colors.red,
+                  tileColor: Theme.of(context).colorScheme.error,
                   leading: const Icon(Icons.close, color: Colors.white),
-                  title: const Text(
-                    'Отмена',
-                    style: TextStyle(color: Colors.white),
+                  title: Text(
+                    AppLocalizations.of(context)!.cancel,
+                    style: TextStyle(color: Theme.of(context).colorScheme.onError),
                   ),
                   onTap: () => Navigator.pop(bctx),
                 ),
