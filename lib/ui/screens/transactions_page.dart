@@ -76,13 +76,13 @@ class TransactionsPage extends StatelessWidget {
                 children: [
                   Container(
                     width: double.infinity,
-                    color: Colors.red,
+                    color: Theme.of(context).colorScheme.error,
                     padding: const EdgeInsets.all(8),
                     alignment: Alignment.center,
-                    child: const Text(
+                    child: Text(
                       'Offline mode',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.onError,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

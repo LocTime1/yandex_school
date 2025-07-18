@@ -49,7 +49,11 @@ class HomeFab extends StatelessWidget {
           constraints: const BoxConstraints.tightFor(width: 70, height: 70),
           shape: const CircleBorder(),
           elevation: 4,
-          child: const Icon(Icons.add, size: 40, color: Colors.white),
+          child: Icon(
+            Icons.add,
+            size: 40,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
         );
       },
     );

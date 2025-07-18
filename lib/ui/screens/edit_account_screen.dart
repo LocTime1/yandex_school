@@ -93,10 +93,10 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                 key: Key(acc.id.toString()),
                 direction: DismissDirection.endToStart,
                 background: Container(
-                  color: Colors.red,
+                  color: Theme.of(context).colorScheme.error,
                   alignment: Alignment.centerRight,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: const Icon(Icons.delete, color: Colors.white),
+                  child: Icon(Icons.delete, color: Theme.of(context).colorScheme.onError),
                 ),
                 onDismissed: (_) async {
                   await _delete(acc);
@@ -126,12 +126,12 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
+                    backgroundColor: Theme.of(context).colorScheme.error,
                     minimumSize: const Size.fromHeight(48),
                   ),
-                  label: const Text(
+                  label: Text(
                     'Удалить счёт',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Theme.of(context).colorScheme.onError),
                   ),
                   onPressed: () => _delete(acc),
                 ),

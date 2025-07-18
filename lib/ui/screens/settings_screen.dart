@@ -7,8 +7,11 @@ import '../../core/models/settings_provider.dart';
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
-  Widget buildArrow(BuildContext context) =>
-      const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey);
+  Widget buildArrow(BuildContext context) => Icon(
+    Icons.arrow_forward_ios,
+    size: 16,
+    color: Theme.of(context).colorScheme.onSurface,
+  );
 
   @override
   Widget build(BuildContext context) {

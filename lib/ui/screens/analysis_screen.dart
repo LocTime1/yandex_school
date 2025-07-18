@@ -48,7 +48,7 @@ class _AnalysisView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Анализ'),
         centerTitle: true,
-        leading: const BackButton(color: Colors.black),
+        leading: BackButton(color: Theme.of(context).colorScheme.onSurface),
       ),
       body: Column(
         children: [

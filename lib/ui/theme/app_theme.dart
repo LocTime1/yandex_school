@@ -14,9 +14,7 @@ class AppTheme {
       colorScheme: ColorScheme.light(
         primary: mainColor,
         secondary: lightPrimary, 
-        background: Colors.white,
         onPrimary: Colors.black,
-        onBackground: Colors.black,
       ),
       primaryColor: mainColor,
       scaffoldBackgroundColor: Colors.white,
@@ -26,7 +24,7 @@ class AppTheme {
         elevation: 0,
       ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey[200],
         indicatorColor: mainColor.withValues(alpha: 0.12),
         iconTheme: WidgetStateProperty.all(
           const IconThemeData(color: Colors.black87),
@@ -44,23 +42,22 @@ class AppTheme {
 
   static ThemeData dark(Color mainColor) {
     final lightPrimary = lighten(mainColor, 0.25);
-
     return ThemeData(
       brightness: Brightness.dark,
       colorScheme: ColorScheme.dark(
         primary: mainColor,
         secondary: lightPrimary, 
-        background: Colors.black,
         onPrimary: Colors.white,
-        onBackground: Colors.white,
       ),
+
       primaryColor: mainColor,
-      scaffoldBackgroundColor: Colors.black,
+      scaffoldBackgroundColor: Colors.grey[500],
       appBarTheme: AppBarTheme(
         backgroundColor: mainColor,
         foregroundColor: Colors.white,
         elevation: 0,
       ),
+
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: Colors.grey[900],
         indicatorColor: mainColor.withValues(alpha: 0.18),
@@ -71,6 +68,7 @@ class AppTheme {
           const TextStyle(color: Colors.white),
         ),
       ),
+
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.all(mainColor),
         trackColor: WidgetStateProperty.all(mainColor.withValues(alpha: 0.5)),

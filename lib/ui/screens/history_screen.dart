@@ -47,9 +47,9 @@ class _HistoryView extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.primary,
         actions: [
           IconButton(
-            icon: const Icon(
+            icon:  Icon(
               Icons.calendar_today,
-              color: Colors.grey,
+              color: Theme.of(context).colorScheme.onSurface,
               size: 28,
             ),
             onPressed: () {

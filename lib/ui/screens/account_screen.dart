@@ -132,11 +132,11 @@ class _AccountScreenState extends State<AccountScreen> {
                   );
                 }),
                 ListTile(
-                  tileColor: Colors.red,
+                  tileColor: Theme.of(context).colorScheme.error,
                   leading: const Icon(Icons.close, color: Colors.white),
-                  title: const Text(
+                  title: Text(
                     'Отмена',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Theme.of(context).colorScheme.onError),
                   ),
                   onTap: () => Navigator.pop(bctx),
                 ),

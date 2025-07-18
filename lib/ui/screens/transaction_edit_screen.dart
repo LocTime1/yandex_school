@@ -215,10 +215,10 @@ class _TransactionEditScreenState extends State<TransactionEditScreen> {
         title: Text(isEd ? 'Редактировать' : 'Новая операция'),
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
-        leading: const CloseButton(color: Colors.black),
+        leading:  CloseButton(color: Theme.of(context).colorScheme.onSurface),
         actions: [
           IconButton(
-            icon: const Icon(Icons.check, color: Colors.black),
+            icon: Icon(Icons.check, color: Theme.of(context).colorScheme.onSurface),
             onPressed: _save,
           ),
         ],
@@ -333,7 +333,7 @@ class _TransactionEditScreenState extends State<TransactionEditScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.redAccent,
+                  backgroundColor: Theme.of(context).colorScheme.onError,
                 ),
                 onPressed: _delete,
                 icon: const Icon(Icons.delete),

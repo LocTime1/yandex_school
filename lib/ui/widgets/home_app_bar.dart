@@ -87,7 +87,7 @@ class _AppBarIcon extends StatelessWidget {
     return IconButton(
       onPressed: onPressed,
       padding: const EdgeInsets.only(right: 15),
-      icon: Icon(icon, color: Colors.grey[800], size: 30),
+      icon: Icon(icon, color: Theme.of(context).colorScheme.onPrimary, size: 30),
     );
   }
 }
