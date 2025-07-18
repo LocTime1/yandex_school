@@ -25,7 +25,7 @@ import 'domain/repositories/bank_account_repository.dart';
 import 'domain/entities/transaction.dart';
 import 'domain/entities/category.dart';
 import 'domain/entities/bank_account.dart';
-import 'ui/screens/home_screen.dart';
+import 'ui/screens/app_guard.dart';
 import 'ui/theme/app_theme.dart';
 
 Future<void> main() async {
@@ -115,7 +115,6 @@ Future<void> main() async {
   );
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -129,11 +128,10 @@ class MyApp extends StatelessWidget {
           title: 'Yandex Homework',
           theme: AppTheme.light(mainColor),
           darkTheme: AppTheme.dark(mainColor),
-          themeMode: settings.useSystemTheme
-              ? ThemeMode.system
-              : ThemeMode.light,
+          themeMode:
+              settings.useSystemTheme ? ThemeMode.system : ThemeMode.light,
           locale: const Locale('ru'),
-          home: const HomeScreen(),
+          home: AppGuard(),
         );
       },
     );

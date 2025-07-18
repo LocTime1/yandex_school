@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 import '../../core/models/settings_provider.dart';
+import 'pin_code_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -90,9 +91,42 @@ class SettingsScreen extends StatelessWidget {
         const Divider(height: 1),
 
         ListTile(
-          title: const Text('Код пароль'),
+          title: const Text('Код-пароль'),
           trailing: buildArrow(context),
-          onTap: () {},
+          onTap: () async {
+            final hasPin = await settings.hasPin();
+            if (hasPin) {
+              final ok = await Navigator.of(context).push<bool>(
+                MaterialPageRoute(
+                  builder:
+                      (_) => PinCodeScreen(
+                        isSetMode: false,
+                        promptText: 'Введите старый 4-значный код',
+                      ),
+                ),
+              );
+              if (ok == true) {
+                await Navigator.of(context).push<bool>(
+                  MaterialPageRoute(
+                    builder: (_) => PinCodeScreen(isSetMode: true),
+                  ),
+                );
+              }
+            } else {
+              await Navigator.of(context).push<bool>(
+                MaterialPageRoute(
+                  builder: (_) => PinCodeScreen(isSetMode: true),
+                ),
+              );
+            }
+          },
+        ),
+        const Divider(height: 1),
+
+        SwitchListTile(
+          title: const Text('FaceID / TouchID'),
+          value: settings.biometricsEnabled,
+          onChanged: (val) => settings.setBiometricsEnabled(val),
         ),
         const Divider(height: 1),
 
