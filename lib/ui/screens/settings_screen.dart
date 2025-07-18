@@ -81,10 +81,11 @@ class SettingsScreen extends StatelessWidget {
         ),
         const Divider(height: 1),
 
-        ListTile(
+        SwitchListTile(
           title: const Text('Хаптики'),
-          trailing: buildArrow(context),
-          onTap: () {},
+          value: settings.hapticsEnabled,
+          activeColor: mainColor,
+          onChanged: (val) => settings.setHapticsEnabled(val),
         ),
         const Divider(height: 1),
 

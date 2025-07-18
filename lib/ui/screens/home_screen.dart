@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import '../../core/models/settings_provider.dart';
 import '../../core/models/transaction_type.dart';
 import '../screens/transactions_page.dart';
 import '../screens/articles_screen.dart';
@@ -102,8 +104,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: idx,
-        onDestinationSelected:
-            (i) => context.read<ValueNotifier<int>>().value = i,
+        onDestinationSelected: (i) {
+          if (context.read<SettingsProvider>().hapticsEnabled) {
+            HapticFeedback.lightImpact();
+          }
+          context.read<ValueNotifier<int>>().value = i;
+        },
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.trending_down),

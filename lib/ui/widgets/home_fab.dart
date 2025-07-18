@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/models/selected_account.dart';
+import '../../core/models/settings_provider.dart';
 import '../../core/models/transaction_type.dart';
 import '../../domain/entities/transaction.dart';
 import '../../domain/repositories/transaction_repository.dart';
@@ -28,6 +30,9 @@ class HomeFab extends StatelessWidget {
 
         return RawMaterialButton(
           onPressed: () {
+            if (context.read<SettingsProvider>().hapticsEnabled) {
+              HapticFeedback.lightImpact();
+            }
             Navigator.of(context)
                 .push<AppTransaction>(
                   MaterialPageRoute(
