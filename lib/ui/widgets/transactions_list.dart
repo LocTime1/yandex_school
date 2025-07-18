@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/transaction.dart';
 import '../../domain/entities/category.dart';
+import '../../l10n/app_localizations.dart';
 
 class TransactionsList extends StatelessWidget {
   final bool showHeader;
@@ -29,8 +30,8 @@ class TransactionsList extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               children: [
-                const Text(
-                  'Всего',
+                 Text(
+                  AppLocalizations.of(context)!.total_2,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
                 const Spacer(),

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../core/models/selected_account.dart';
 import '../../domain/entities/bank_account.dart';
 import '../../domain/repositories/bank_account_repository.dart';
+import '../../l10n/app_localizations.dart';
 
 class EditAccountScreen extends StatefulWidget {
   const EditAccountScreen({super.key, required this.accountId});
@@ -72,7 +73,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Мой счёт'),
+            title: Text(AppLocalizations.of(context)!.myAccount),
             centerTitle: true,
             backgroundColor: Theme.of(context).colorScheme.primary,
             leading: IconButton(
@@ -130,7 +131,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     minimumSize: const Size.fromHeight(48),
                   ),
                   label: Text(
-                    'Удалить счёт',
+                    AppLocalizations.of(context)!.deleteAccount,
                     style: TextStyle(color: Theme.of(context).colorScheme.onError),
                   ),
                   onPressed: () => _delete(acc),

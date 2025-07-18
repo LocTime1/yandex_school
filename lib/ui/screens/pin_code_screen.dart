@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/models/settings_provider.dart';
+import '../../l10n/app_localizations.dart';
 
 class PinCodeScreen extends StatefulWidget {
   final bool isSetMode;
@@ -37,7 +38,7 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
         if (mounted) Navigator.of(context).pop(true);
       } else {
         setState(() {
-          _error = 'Неверный пин-код';
+          _error = AppLocalizations.of(context)!.wrongPin;
           _controller.clear();
         });
       }
@@ -50,12 +51,12 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
     String prompt =
         widget.promptText ??
         (widget.isSetMode
-            ? 'Задайте новый 4-значный код'
-            : 'Введите 4-значный код');
+            ? AppLocalizations.of(context)!.newPin
+            : AppLocalizations.of(context)!.pin);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isSetMode ? 'Установить PIN' : 'Введите PIN'),
+        title: Text(widget.isSetMode ? AppLocalizations.of(context)!.setPin : AppLocalizations.of(context)!.enterPin),
         centerTitle: true,
         automaticallyImplyLeading: widget.canGoBack,
       ),

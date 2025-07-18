@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../domain/entities/category.dart';
 import '../../domain/repositories/category_repository.dart';
+import '../../l10n/app_localizations.dart';
 
 class ArticlesScreen extends StatefulWidget {
   const ArticlesScreen({super.key});
@@ -68,7 +69,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
               child: TextField(
                 controller: _searchCtrl,
                 decoration: InputDecoration(
-                  hintText: 'Найти статью',
+                  hintText: AppLocalizations.of(context)!.findArticle,
                   prefixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),

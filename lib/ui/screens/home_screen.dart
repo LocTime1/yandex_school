@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import '../../core/models/settings_provider.dart';
 import '../../core/models/transaction_type.dart';
+import '../../l10n/app_localizations.dart';
 import '../screens/transactions_page.dart';
 import '../screens/articles_screen.dart';
 import '../screens/account_screen.dart';
@@ -20,13 +21,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _titles = [
-    'Расходы сегодня',
-    'Доходы сегодня',
-    'Счет',
-    'Статьи',
-    'Настройки',
-  ];
   bool _hasInternet = true;
   StreamSubscription<List<ConnectivityResult>>? _connSub;
 
@@ -64,6 +58,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final _titles = [
+      l10n.todayExpenses,
+      l10n.todayIncome,
+      l10n.account,
+      l10n.articles,
+      l10n.settings,
+    ];
     final nav = context.watch<ValueNotifier<int>>();
     final idx = nav.value;
 
@@ -92,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.all(8),
               alignment: Alignment.center,
               child: Text(
-                'Offline mode',
+                AppLocalizations.of(context)!.offlineMode,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onError,
                   fontWeight: FontWeight.bold,

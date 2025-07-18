@@ -25,9 +25,11 @@ import 'domain/repositories/bank_account_repository.dart';
 import 'domain/entities/transaction.dart';
 import 'domain/entities/category.dart';
 import 'domain/entities/bank_account.dart';
+import 'l10n/app_localizations.dart';
 import 'ui/screens/app_guard.dart';
 import 'ui/theme/app_theme.dart';
 import 'ui/widgets/blur_on_inactive.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -127,14 +129,19 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Yandex Homework',
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('ru'), Locale('en')],
+          locale: settings.selectedLocale,
           theme: AppTheme.light(mainColor),
           darkTheme: AppTheme.dark(mainColor),
           themeMode:
               settings.useSystemTheme ? ThemeMode.system : ThemeMode.light,
-          locale: const Locale('ru'),
-          home: BlurOnInactive(
-            child: AppGuard(),
-          ),
+          home: BlurOnInactive(child: AppGuard()),
         );
       },
     );

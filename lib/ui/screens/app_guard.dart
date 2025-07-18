@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:local_auth/local_auth.dart';
 
 import '../../core/models/settings_provider.dart';
+import '../../l10n/app_localizations.dart';
 import 'pin_code_screen.dart';
 import 'home_screen.dart';
 
@@ -33,7 +34,7 @@ class _AppGuardState extends State<AppGuard> {
           await auth.canCheckBiometrics && await auth.isDeviceSupported();
       if (canBio) {
         final ok = await auth.authenticate(
-          localizedReason: 'Выполните вход через FaceID/TouchID',
+          localizedReason: AppLocalizations.of(context)!.loginFaceId,
           options: const AuthenticationOptions(biometricOnly: true),
         );
         if (ok) {

@@ -6,6 +6,8 @@ class SettingsProvider extends ChangeNotifier {
   bool _useSystemTheme = true;
   bool _hapticsEnabled = true;
   Color _mainColor = Colors.green;
+  Locale? _selectedLocale;
+  Locale? get selectedLocale => _selectedLocale;
 
   bool get useSystemTheme => _useSystemTheme;
   bool get hapticsEnabled => _hapticsEnabled;
@@ -26,6 +28,17 @@ class SettingsProvider extends ChangeNotifier {
     _mainColor = colorValue != null ? Color(colorValue) : Colors.green;
 
     _biometricsEnabled = (await _storage.read(key: _biometricsKey)) == '1';
+    String? locale = prefs.getString('selectedLocale');
+    if (locale != null) {
+      _selectedLocale = Locale(locale);
+    }
+    notifyListeners();
+  }
+
+  Future<void> setLocale(Locale locale) async {
+    _selectedLocale = locale;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedLocale', locale.languageCode);
     notifyListeners();
   }
 

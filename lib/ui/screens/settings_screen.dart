@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 import '../../core/models/settings_provider.dart';
+import '../../l10n/app_localizations.dart';
 import 'pin_code_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -22,7 +23,7 @@ class SettingsScreen extends StatelessWidget {
     return ListView(
       children: [
         ListTile(
-          title: const Text('Тёмная тема'),
+          title: Text(AppLocalizations.of(context)!.darkTheme),
           trailing: Switch(
             value: settings.useSystemTheme,
             activeColor: mainColor,
@@ -32,7 +33,7 @@ class SettingsScreen extends StatelessWidget {
         const Divider(height: 1),
 
         ListTile(
-          title: const Text('Основной цвет'),
+          title: Text(AppLocalizations.of(context)!.mainColor),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [CircleAvatar(backgroundColor: mainColor, radius: 10)],
@@ -43,7 +44,7 @@ class SettingsScreen extends StatelessWidget {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: const Text('Выберите цвет'),
+                  title: Text(AppLocalizations.of(context)!.chooseColor),
                   content: SingleChildScrollView(
                     child: ColorPicker(
                       pickerColor: pickedColor,
@@ -56,13 +57,13 @@ class SettingsScreen extends StatelessWidget {
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      child: const Text('Отмена'),
+                      child: Text(AppLocalizations.of(context)!.cancel),
                     ),
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: const Text('ОК'),
+                      child: Text(AppLocalizations.of(context)!.ok),
                     ),
                   ],
                 );
@@ -76,14 +77,14 @@ class SettingsScreen extends StatelessWidget {
         const Divider(height: 1),
 
         ListTile(
-          title: const Text('Звуки'),
+          title: Text(AppLocalizations.of(context)!.sounds),
           trailing: buildArrow(context),
           onTap: () {},
         ),
         const Divider(height: 1),
 
         SwitchListTile(
-          title: const Text('Хаптики'),
+          title: Text(AppLocalizations.of(context)!.haptics),
           value: settings.hapticsEnabled,
           activeColor: mainColor,
           onChanged: (val) => settings.setHapticsEnabled(val),
@@ -91,7 +92,7 @@ class SettingsScreen extends StatelessWidget {
         const Divider(height: 1),
 
         ListTile(
-          title: const Text('Код-пароль'),
+          title: Text(AppLocalizations.of(context)!.pinCode),
           trailing: buildArrow(context),
           onTap: () async {
             final hasPin = await settings.hasPin();
@@ -101,7 +102,7 @@ class SettingsScreen extends StatelessWidget {
                   builder:
                       (_) => PinCodeScreen(
                         isSetMode: false,
-                        promptText: 'Введите старый 4-значный код',
+                        promptText: AppLocalizations.of(context)!.oldPin,
                       ),
                 ),
               );
@@ -124,28 +125,40 @@ class SettingsScreen extends StatelessWidget {
         const Divider(height: 1),
 
         SwitchListTile(
-          title: const Text('FaceID / TouchID'),
+          title: Text(AppLocalizations.of(context)!.faceID),
           value: settings.biometricsEnabled,
           onChanged: (val) => settings.setBiometricsEnabled(val),
         ),
         const Divider(height: 1),
 
         ListTile(
-          title: const Text('Синхронизация'),
+          title: Text(AppLocalizations.of(context)!.sync),
           trailing: buildArrow(context),
           onTap: () {},
         ),
         const Divider(height: 1),
 
         ListTile(
-          title: const Text('Язык'),
-          trailing: buildArrow(context),
-          onTap: () {},
+          title: Text(AppLocalizations.of(context)!.settings),
+          trailing: DropdownButton<Locale>(
+            value: settings.selectedLocale ?? Locale('ru'),
+            underline: SizedBox(),
+            items: const [
+              DropdownMenuItem(value: Locale('ru'), child: Text('Русский')),
+              DropdownMenuItem(value: Locale('en'), child: Text('English')),
+            ],
+            onChanged: (locale) {
+              if (locale != null) {
+                settings.setLocale(locale);
+              }
+            },
+          ),
         ),
+
         const Divider(height: 1),
 
         ListTile(
-          title: const Text('О программе'),
+          title: Text(AppLocalizations.of(context)!.about),
           trailing: buildArrow(context),
           onTap: () {},
         ),

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../core/models/selected_account.dart';
 import '../../core/models/transaction_type.dart';
+import '../../l10n/app_localizations.dart';
 import '../models/history_model.dart';
 import '../widgets/transactions_list.dart';
 import 'analysis_screen.dart';
@@ -42,7 +43,7 @@ class _HistoryView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Моя история'),
+        title:  Text(AppLocalizations.of(context)!.myHistory),
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
         actions: [
@@ -70,19 +71,19 @@ class _HistoryView extends StatelessWidget {
               : Column(
                 children: [
                   ListTile(
-                    title: const Text('Начало'),
+                    title:  Text(AppLocalizations.of(context)!.start),
                     tileColor: Theme.of(context).colorScheme.secondary,
                     trailing: Text(fmt.format(model.startDate)),
                     onTap: () => _pickDate(context, model, isStart: true),
                   ),
                   ListTile(
-                    title: const Text('Конец'),
+                    title:  Text(AppLocalizations.of(context)!.end),
                     tileColor: Theme.of(context).colorScheme.secondary,
                     trailing: Text(fmt.format(model.endDate)),
                     onTap: () => _pickDate(context, model, isStart: false),
                   ),
                   ListTile(
-                    title: const Text('Сумма'),
+                    title: Text(AppLocalizations.of(context)!.total),
                     tileColor: Theme.of(context).colorScheme.secondary,
                     trailing: Text('${model.total.toStringAsFixed(0)} ₽'),
                   ),

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../core/models/selected_account.dart';
 import '../../core/models/transaction_type.dart';
+import '../../l10n/app_localizations.dart';
 import '../models/analysis_model.dart';
 import 'history_screen.dart';
 
@@ -46,14 +47,14 @@ class _AnalysisView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Анализ'),
+        title: Text(AppLocalizations.of(context)!.analysis),
         centerTitle: true,
         leading: BackButton(color: Theme.of(context).colorScheme.onSurface),
       ),
       body: Column(
         children: [
           ListTile(
-            title: const Text('Период: начало'),
+            title: Text(AppLocalizations.of(context)!.periodStart),
             trailing: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
               decoration: BoxDecoration(
@@ -68,7 +69,7 @@ class _AnalysisView extends StatelessWidget {
           ),
           const Divider(height: 1, thickness: 1),
           ListTile(
-            title: const Text('Период: конец'),
+            title: Text(AppLocalizations.of(context)!.periodEnd),
             trailing: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
               decoration: BoxDecoration(
@@ -81,7 +82,7 @@ class _AnalysisView extends StatelessWidget {
           ),
           const Divider(height: 1, thickness: 1),
           ListTile(
-            title: const Text('Сумма'),
+            title: Text(AppLocalizations.of(context)!.total),
             trailing: Text(
               '${model.total.toStringAsFixed(0)} ₽',
               style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),

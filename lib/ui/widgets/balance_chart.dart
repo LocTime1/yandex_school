@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../core/models/selected_account.dart';
 import '../../domain/repositories/transaction_repository.dart';
+import '../../l10n/app_localizations.dart';
 
 class BalanceChart extends StatefulWidget {
   const BalanceChart({Key? key}) : super(key: key);
@@ -109,14 +110,14 @@ class _BalanceChartState extends State<BalanceChart> {
             unselectedColor: Theme.of(context).scaffoldBackgroundColor,
             borderColor: Theme.of(context).colorScheme.primary,
             groupValue: _byMonth,
-            children: const {
+            children: {
               false: Padding(
                 padding: EdgeInsets.all(6),
-                child: Text('По дням'),
+                child: Text(AppLocalizations.of(context)!.byDay),
               ),
               true: Padding(
                 padding: EdgeInsets.all(6),
-                child: Text('По месяцам'),
+                child: Text(AppLocalizations.of(context)!.byMonth),
               ),
             },
             onValueChanged: (v) {
