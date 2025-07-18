@@ -45,7 +45,7 @@ class HomeFab extends StatelessWidget {
                   }
                 });
           },
-          fillColor: const Color(0xFF2AE881),
+          fillColor: Theme.of(context).colorScheme.primary,
           constraints: const BoxConstraints.tightFor(width: 70, height: 70),
           shape: const CircleBorder(),
           elevation: 4,

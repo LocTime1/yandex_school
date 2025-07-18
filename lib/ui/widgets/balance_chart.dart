@@ -105,8 +105,8 @@ class _BalanceChartState extends State<BalanceChart> {
       child: Column(
         children: [
           CupertinoSegmentedControl<bool>(
-            selectedColor: Color.fromRGBO(42, 232, 129, 1),
-            borderColor: Color.fromRGBO(42, 232, 129, 1),
+            selectedColor: Theme.of(context).colorScheme.primary,
+            borderColor: Theme.of(context).colorScheme.primary,
             groupValue: _byMonth,
             children: const {
               false: Padding(

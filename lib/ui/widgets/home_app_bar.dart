@@ -22,7 +22,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(titles[idx]),
       centerTitle: true,
-      backgroundColor: const Color(0xFF00FE81),
+      backgroundColor: Theme.of(context).colorScheme.primary,
       actions: _buildActions(context, idx),
     );
   }

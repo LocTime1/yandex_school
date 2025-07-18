@@ -9,6 +9,7 @@ import '../screens/articles_screen.dart';
 import '../screens/account_screen.dart';
 import '../widgets/home_app_bar.dart';
 import '../widgets/home_fab.dart';
+import 'settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -75,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       const AccountScreen(),
       const ArticlesScreen(),
-      const Center(child: Text('Настройки')),
+      SettingsScreen(),
     ];
 
     return Scaffold(

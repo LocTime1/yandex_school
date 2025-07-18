@@ -214,7 +214,7 @@ class _TransactionEditScreenState extends State<TransactionEditScreen> {
       appBar: AppBar(
         title: Text(isEd ? 'Редактировать' : 'Новая операция'),
         centerTitle: true,
-        backgroundColor: const Color(0xFF00FE81),
+        backgroundColor: Theme.of(context).colorScheme.primary,
         leading: const CloseButton(color: Colors.black),
         actions: [
           IconButton(

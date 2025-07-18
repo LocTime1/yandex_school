@@ -74,7 +74,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
           appBar: AppBar(
             title: const Text('Мой счёт'),
             centerTitle: true,
-            backgroundColor: const Color(0xFF00FE81),
+            backgroundColor: Theme.of(context).colorScheme.primary,
             leading: IconButton(
               icon: const Icon(Icons.close),
               onPressed: () => Navigator.pop(context),

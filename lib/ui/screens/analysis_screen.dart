@@ -57,7 +57,7 @@ class _AnalysisView extends StatelessWidget {
             trailing: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
               decoration: BoxDecoration(
-                color: const Color(0xFF00FE81),
+                color: Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Text(
@@ -72,7 +72,7 @@ class _AnalysisView extends StatelessWidget {
             trailing: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
               decoration: BoxDecoration(
-                color: const Color(0xFF00FE81),
+                color: Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Text(DateFormat('LLLL yyyy', 'ru').format(model.endDate)),

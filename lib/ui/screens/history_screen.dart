@@ -44,7 +44,7 @@ class _HistoryView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Моя история'),
         centerTitle: true,
-        backgroundColor: const Color(0xFF00FE81),
+        backgroundColor: Theme.of(context).colorScheme.primary,
         actions: [
           IconButton(
             icon: const Icon(
@@ -71,19 +71,19 @@ class _HistoryView extends StatelessWidget {
                 children: [
                   ListTile(
                     title: const Text('Начало'),
-                    tileColor: const Color.fromRGBO(0, 254, 129, 0.25),
+                    tileColor: Theme.of(context).colorScheme.secondary,
                     trailing: Text(fmt.format(model.startDate)),
                     onTap: () => _pickDate(context, model, isStart: true),
                   ),
                   ListTile(
                     title: const Text('Конец'),
-                    tileColor: const Color.fromRGBO(0, 254, 129, 0.25),
+                    tileColor: Theme.of(context).colorScheme.secondary,
                     trailing: Text(fmt.format(model.endDate)),
                     onTap: () => _pickDate(context, model, isStart: false),
                   ),
                   ListTile(
                     title: const Text('Сумма'),
-                    tileColor: const Color.fromRGBO(0, 254, 129, 0.25),
+                    tileColor: Theme.of(context).colorScheme.secondary,
                     trailing: Text('${model.total.toStringAsFixed(0)} ₽'),
                   ),
                   Expanded(

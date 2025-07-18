@@ -73,7 +73,7 @@ class _AccountScreenState extends State<AccountScreen> {
         return Column(
           children: [
             Material(
-              color: const Color(0xFFBDFBE6),
+              color: Theme.of(context).colorScheme.secondary,
               child: Column(
                 children: [
                   _BalanceTile(

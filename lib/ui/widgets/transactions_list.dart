@@ -25,7 +25,7 @@ class TransactionsList extends StatelessWidget {
         if (showHeader)
           Container(
             width: double.infinity,
-            color: const Color.fromRGBO(212, 250, 230, 1),
+            color: Theme.of(context).colorScheme.secondary,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               children: [

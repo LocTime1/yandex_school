@@ -6,6 +6,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:worker_manager/worker_manager.dart';
 
 import 'core/models/selected_account.dart';
+import 'core/models/settings_provider.dart';
 import 'data/datasources/api_client.dart';
 import 'data/datasources/backup_ds.dart';
 import 'data/datasources/hive_transaction_ds.dart';
@@ -25,6 +26,7 @@ import 'domain/entities/transaction.dart';
 import 'domain/entities/category.dart';
 import 'domain/entities/bank_account.dart';
 import 'ui/screens/home_screen.dart';
+import 'ui/theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,6 +67,9 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider<SettingsProvider>(
+          create: (_) => SettingsProvider()..load(),
+        ),
         Provider<ApiClient>.value(value: apiClient),
         Provider<CategoryRepository>(
           create:
@@ -110,15 +115,27 @@ Future<void> main() async {
   );
 }
 
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Yandex Homework',
-      theme: ThemeData(primarySwatch: Colors.green),
-      locale: const Locale('ru'),
-      home: const HomeScreen(),
+    return Consumer<SettingsProvider>(
+      builder: (context, settings, _) {
+        final mainColor = settings.mainColor;
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Yandex Homework',
+          theme: AppTheme.light(mainColor),
+          darkTheme: AppTheme.dark(mainColor),
+          themeMode: settings.useSystemTheme
+              ? ThemeMode.system
+              : ThemeMode.light,
+          locale: const Locale('ru'),
+          home: const HomeScreen(),
+        );
+      },
     );
   }
 }
