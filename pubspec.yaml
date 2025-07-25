@@ -47,6 +47,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.4
   flutter_native_splash: ^2.4.6
   mockito: ^5.4.5
+  alchemist: ^0.12.1
 
 flutter_icons:
   android: true          
